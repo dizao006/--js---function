@@ -7,6 +7,30 @@
 const PENDING = 'pending'
 const FULFILLED = 'fullfilled'
 const REJECTED = 'rejected'
+/**
+ * 
+ * @param {Function} runMicroTask  创建一个微队列 
+ */
+function runMicroTask(callback) {
+    //判断node环境
+    if (process && process.nextTick) {
+        process.nextTick(callback); //放到微队列马上执行
+    } else if (MutationObserver) {
+        //浏览器的微队列
+        //创建一个观察者实例，观察页面元素的变化，当变化时调用callback放入微队列执行
+        const p = document.createElement('p')
+        const observer = new MutationObserver(callback)
+        observer.observe(p, {
+            childList: true
+        });
+        p.innerHTML = '1'
+    } else {
+        //低版本的浏览器
+        setTimeout(callback, 0);
+    }
+
+}
+
 
 class MyPromise {
     /**
@@ -16,13 +40,41 @@ class MyPromise {
     constructor(executor) {
         this._status = PENDING;
         this._value = undefined
+        this._handlers = [] //处理函数形成的对象队列
+
         //promise代码遇到错误会引起状态变为reject
         try {
             executor(this._reslove.bind(this), this._reject.bind(this));
         } catch (error) {
             this._reject(error);
         }
+    }
+    /**
+     * @param {Function} _pushHandlers 针对handlers增加队列的方式
+     * @param {Function} executor 要添加进去的函数
+     * @param {String} state 什么状态下执行
+     * @param {Function}  resolve then返回的promise成功   后续才会处理
+     * @param {Function} reject  then返回的promise失败 
+     */
+    _pushHandlers(executor, state, resolve, reject) {
+        this._handlers.push({
+            executor,
+            state,
+            resolve,
+            reject
+        })
+    }
 
+    /**
+     * 
+     * @param {Function} onFulfilled 
+     * @param {Function} onRejected 
+     */
+    then(onFulfilled, onRejected) {
+        return new MyPromise((resolve, reject) => {
+            this._pushHandlers(onFulfilled, FULFILLED, resolve, reject) //表示只有成功的时候才会执行
+            this._pushHandlers(onFulfilled, REJECTED, resolve, reject) //表示失败的时候才会执行
+        })
     }
     /**
      * @param {Function} _changeStatus  改变状态的方法
@@ -54,6 +106,19 @@ class MyPromise {
 }
 
 let s = new MyPromise((resolve, reject) => {
-    throw new Error(123)
+    setTimeout(() => {
+        resolve('ye')
+
+    }, 1000)
 })
+s.then((e) => {
+    console.log(e)
+})
+s.then(function () {}, function () {})
 console.log(s)
+
+//测试微队列函数
+// runMicroTask(() => {
+//     console.log('2')
+// })
+// console.log('1');
