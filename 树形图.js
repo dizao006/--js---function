@@ -303,22 +303,3 @@ function convertToTree(regions, rootId = "0") {
 }
 let result = convertToTree(regions)
 console.log(result)
-
-
-
-// function convertToTree(regions, rootId = '0') {
-//     let obj = [];
-//     regions.forEach(e => {
-//         if (e.pid == rootId) {
-//             e.children = convertToTree(regions, e.id)
-//             obj.push(e)
-//         }
-//     });
-//     return obj
-// }
-// let result = convertToTree(regions)
-// console.log(result)
-
-
-
-
