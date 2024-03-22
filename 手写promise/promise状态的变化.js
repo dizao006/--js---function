@@ -64,6 +64,28 @@ class MyPromise {
             reject
         })
     }
+    /**
+     * @param {Function} _runHandlers 执行队列函数
+     */
+    _runHandlers() {
+        if (this._status === PENDING) {
+            //目前是挂起
+            return
+        }
+        while (this._handlers[0]) {
+            const handler = this._handlers[0]
+            this._runOneHandler(handler) //调用执行每一个
+            this._handlers.shift() //执行一个删除一个
+        }
+    }
+    /**
+     * 
+     * @param {Object} handler  处理每一个任务
+     */
+    _runOneHandler(handler) {
+
+    }
+
 
     /**
      * 
@@ -74,6 +96,7 @@ class MyPromise {
         return new MyPromise((resolve, reject) => {
             this._pushHandlers(onFulfilled, FULFILLED, resolve, reject) //表示只有成功的时候才会执行
             this._pushHandlers(onFulfilled, REJECTED, resolve, reject) //表示失败的时候才会执行
+            this._runHandlers() //加到队列时也要执行一次队列，防止没有经过等待就改变状态的情况发生
         })
     }
     /**
@@ -88,6 +111,8 @@ class MyPromise {
         }
         this._status = newStatus;
         this._value = value;
+        //状态发生改变时，运行队列,从头到尾看一遍
+        this._runHandlers()
     }
     _reslove(data) {
         //标记当前任务完成，完成后改变状态和数据
