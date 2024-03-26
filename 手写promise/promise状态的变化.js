@@ -82,8 +82,27 @@ class MyPromise {
      * 
      * @param {Object} handler  处理每一个任务
      */
-    _runOneHandler(handler) {
-
+    _runOneHandler({
+        executor,
+        state,
+        resolve,
+        reject
+    }) {
+        runMicroTask(() => {
+            if (this._status !== state) {
+                return //状态不一致
+            }
+            if (typeof executor !== 'function') {
+                //传递的不是函数，那么上一个成功就成功，失败就失败
+                this._status === FULFILLED ? resolve(this._value) : reject(this._value);
+                return
+            }
+            try {
+                executor(this._value)
+            } catch (error) {
+                reject(error)
+            }
+        })
     }
 
 
@@ -95,7 +114,7 @@ class MyPromise {
     then(onFulfilled, onRejected) {
         return new MyPromise((resolve, reject) => {
             this._pushHandlers(onFulfilled, FULFILLED, resolve, reject) //表示只有成功的时候才会执行
-            this._pushHandlers(onFulfilled, REJECTED, resolve, reject) //表示失败的时候才会执行
+            this._pushHandlers(onRejected, REJECTED, resolve, reject) //表示失败的时候才会执行
             this._runHandlers() //加到队列时也要执行一次队列，防止没有经过等待就改变状态的情况发生
         })
     }
@@ -132,15 +151,16 @@ class MyPromise {
 
 let s = new MyPromise((resolve, reject) => {
     setTimeout(() => {
-        resolve('ye')
-
+        resolve(1)
     }, 1000)
 })
-s.then((e) => {
-    console.log(e)
+const s2 = s.then((data) => {
+    console.log(data);
 })
-s.then(function () {}, function () {})
-console.log(s)
+setTimeout(() => {
+    console.log(s);
+    console.log(s2);
+}, 500)
 
 //测试微队列函数
 // runMicroTask(() => {
