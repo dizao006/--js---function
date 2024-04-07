@@ -46,14 +46,8 @@
 
 
 //面试题
-// console.log(add(1)(2)(3).toString());
-// console.log(add(1, 2, 3)(4).toString());
-// console.log(add(1)(2)(3)(4)(5).toString());
-
-
 // function add() {
 //     let arg = Array.prototype.slice.call(arguments);
-
 //     function _addr() {
 //         arg.push(...arguments) //将接收到的参数推入arg里面
 //         return _addr
@@ -64,23 +58,26 @@
 //     }
 //     return _addr
 // }
+// console.log(add(1)(2)(3).toString());
+// console.log(add(1, 2, 3)(4).toString());
+// console.log(add(1)(2)(3)(4)(5).toString());
 
-//另外的写法
-// function curry(fn) {
-//     return function _curry(...args) {
-//         if (args.length >= fn.length) {
-//             return fn.apply(this, args)
-//         } else {
-//             return function (...args2) {
-//                 return _curry.apply(this, args.concat(args2))
-//             }
-//         }
-//     }
-// }
+//另外的写法  定参
+function curry(fn) {
+    return function _curry(...args) {
+        if (args.length >= fn.length) {
+            return fn.apply(this, args)
+        } else {
+            return function (...args2) {
+                return _curry.apply(this, args.concat(args2))
+            }
+        }
+    }
+}
 
-// function add(x, y, z) {
-//     return x + y + z
-// }
-// let s = curry(add)
-// let restult = s(1)(2)(3)(5)
-// console.log(restult)
+function add(x, y, z) {
+    return x + y + z
+}
+let s = curry(add)
+let restult = s(1, 2)(3)
+console.log(restult)

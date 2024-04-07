@@ -78,3 +78,4 @@ function gb(obj, gbroup) {
 }
 let s = gb(inventory, 'pice')
 console.log(s)
+console.info(inventory);

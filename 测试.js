@@ -235,13 +235,23 @@ let ar = [1, [2, 3, [4, 5]]]
 //     }
 // }
 // console.log(s2.fn())
-function eat() {
-    let food = 'jis'
-    return function () {
-        console.log(food)
-        return food
+
+// console.log(a)
+// var a = 'a'
+// var a = () => {
+//     console.log(a);
+//     a = 'a1'
+// }
+// a()
+// console.log(a)
+
+function duichen(start, end) {
+    for (let i = start; i < end + 1; i++) {
+        let s = +(Array.from(i.toString()).reverse().join(''))
+        if (s === i & i > 10) {
+            console.log(i);
+        }
     }
+
 }
-let s = eat() //手动闭包 
-let ss = s()
-console.log(ss);
+duichen(10, 90)

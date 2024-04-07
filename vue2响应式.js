@@ -7,11 +7,9 @@ const obj2 = {
         dd: 9
     }
 }
-
 function isobj(obj) {
     return typeof obj === 'object' && obj !== null && obj !== undefined
 }
-
 function observe(obj) {
     for (const k in obj) {
         let v = obj[k];

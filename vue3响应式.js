@@ -15,18 +15,15 @@ function isobj(obj) {
 function observe(obj) {
     let proxy = new Proxy(obj, {
         get(target, k) {
-            // console.log(target, k,v)
             let v = target[k]
             if (isobj(v)) {
                 v = observe(v)
             }
-            console.log("target", target, 'k', k, 'v', v)
             return v
         },
         set(target, k, val) {
             if (target[k] !== val) {
                 target[k] = val
-                console.log(target, k)
             }
         }
     })

@@ -1,6 +1,6 @@
 // 深拷贝
 //重新创建内存地址，新的数据不会影响另外的数据
-// 1 jJSON.parse(JSON.stringify())
+// 1 JSON.parse(JSON.stringify())
 let stu = {
     name: 's',
     deepStu: {
