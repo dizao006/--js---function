@@ -6,7 +6,7 @@ let s = '12346asda12347asd1234'
 
 
 //得到所有的匹配结果
-let result= s.match(reg)  
+let result = s.match(reg)
 console.log(result)
 
 
@@ -57,15 +57,27 @@ console.log(result)
 // console.log(resa)
 
 
-const _searchStrIndexOf = (str, target) => {
-    // 补全代码
+// const _searchStrIndexOf = (str, target) => {
+//     // 补全代码
 
-    let reg =new RegExp(target, 'g')
-    let s = str.match(reg, target)
-    return s.length
-}
-_searchStrIndexOf('sdffgfdfdgfdw', 'fd')
+//     let reg =new RegExp(target, 'g')
+//     let s = str.match(reg, target)
+//     return s.length
+// }
+// _searchStrIndexOf('sdffgfdfdgfdw', 'fd')
 
 // let re=/fd/g
 // let str='sdffgfdfdgfdw'
 // console.log(str.match(re)) 
+
+
+// 一些特殊一点的正则用法
+// /s /S   \s 是匹配所有空白符，包括换行，\S 非空白符，不包括换行。
+// /w 匹配字母、数字、下划线。等价于 [A-Za-z0-9_]
+// . 匹配除换行符 \n 之外的任何单字符。要匹配 . ，请使用 \. 。
+// /b 定界符可以搜索以什么开头或者结尾的    /ber   erver->er
+// 例如 \w+er\b  ever   意思是搜索以er结尾的数据
+
+// let asd = 'erver asdasder asddasder sader erasd asd aer'
+// let regs = /\w+er\b/g
+// console.log(asd.match(/\ber\w+/g));
