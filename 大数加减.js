@@ -14,7 +14,6 @@ function add(n1, n2) {
         let ge = sum % 10
         result = ge + result
     }
-    console.log(result)
 }
 
 // function add(n1, n2) {
