@@ -23,3 +23,4 @@ function Perosn(name, age) {
 
 let pers = myNew(Perosn, 'dz', 15)
 pers.say()
+

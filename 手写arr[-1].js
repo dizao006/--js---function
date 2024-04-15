@@ -11,5 +11,16 @@ const proxyAry = (arr) => {
         }
     })
 }
-let s = proxyAry(arr)
+
+const proxyAry2 = (arr) => {
+    return new Proxy(arr, {
+        get(target, key) {
+            if (key < 0) {
+                key = (+key) + arr.length
+            }
+            return target[key]
+        },
+    })
+}
+let s = proxyAry2(arr)
 console.log(s[-2]);

@@ -31,9 +31,6 @@ async function cutFile(file) {
                     resolve(result)
                 }
             }
-
         }
-
     })
-
 }

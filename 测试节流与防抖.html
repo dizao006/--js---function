@@ -20,22 +20,46 @@
 <script src="./函数节流.js"></script> -->
 <script>
 
-    let ul = document.querySelectorAll('li')
-    for (let i = 0; i < ul.length; i++) {
-        ul[i].index = i
-        ul[i].onclick = function () {
-            console.log(this.index);
-        }
-    }
+    // let ul = document.querySelectorAll('li')
+    // for (let i = 0; i < ul.length; i++) {
+    //     ul[i].index = i
+    //     ul[i].onclick = function () {
+    //         console.log(this.index);
+    //     }
+    // }
 
     // function s(arr) {
     //     console.log(arr)
     // }
     // let arrs = [2, 3, 4, 5]
     // let result = devounce2(s, 200)
-    // window.onresize = function () {
-    //     result(arrs)
-    // }
+    function fd(fn, time) {
+        let timer
+        return function (...arrs) {
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                fn.apply(this, arrs)
+            }, time)
+        }
+    }
+
+    function jl(fn, time) {
+        let timer
+        return function (...args) {
+            if (timer) {
+                return
+            }
+            timer = setInterval(() => {
+                fn.apply(this, args)
+                timer = null
+            }, time)
+        }
+    }
+    function log() {
+        console.log('ss');
+    }
+    let nelog = jl(log, 1000)
+    window.onresize = nelog
     // let result = throttle3(s, 1000, true)
     // result()
 </script>

@@ -11,12 +11,14 @@
 function devounce2(fn, time = 1000) {
   let timer
   return function (...arges) {
-    clearInterval(timer)
+    clearTimeout(timer)
     timer = setTimeout(() => {
       fn.apply(this, arges)
     }, time)
   }
 }
+
+
 
 // function s() {
 //   console.log('s')
