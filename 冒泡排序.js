@@ -1,8 +1,6 @@
 let arr = [1, 3, 2, 6, 4, 9, 8]
 
 // 排序的本质是交换和比较
-
-
 //排序
 // function getMin(arr) {
 //     let min = Math.min(...arr)
