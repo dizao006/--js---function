@@ -59,23 +59,34 @@ const inventory = [{
   },
 ];
 
+let obj = {}
+for (let i = 0; i < inventory.length; i++) {
+  let quantity = inventory[i].quantity
+  if (obj[quantity]) {
+    obj[quantity].push(inventory[i])
+  } else {
+    obj[quantity] = [inventory[i]]
+  }
+}
+console.log(obj);
+
 // let result = Object.groupBy(inventory, (e) => e.type)
 // console.log(result);
-function gb(obj, gbroup) {
-  let result = {}
-  for (let i = 0; i < obj.length; i++) {
-    let s = obj[i]
-    let fen = s[gbroup]
-    if (result[fen]) {
-      //如果存在对应的key值，则push
-      result[fen].push(obj[i])
-    } else {
-      //如果不存在则把值放入数组添加到对象里
-      result[fen] = [obj[i]]
-    }
-  }
-  return result
-}
-let s = gb(inventory, 'pice')
-console.log(s)
-console.info(inventory);
+// function gb(obj, gbroup) {
+//   let result = {}
+//   for (let i = 0; i < obj.length; i++) {
+//     let s = obj[i]
+//     let fen = s[gbroup]
+//     if (result[fen]) {
+//       //如果存在对应的key值，则push
+//       result[fen].push(obj[i])
+//     } else {
+//       //如果不存在则把值放入数组添加到对象里
+//       result[fen] = [obj[i]]
+//     }
+//   }
+//   return result
+// }
+// let s = gb(inventory, 'pice')
+// console.log(s)
+// console.info(inventory);

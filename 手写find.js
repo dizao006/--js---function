@@ -1,5 +1,6 @@
 Array.prototype.myFind = function (fn) {
     let list = this
+    console.log(list,fn);
     for (let i = 0; i < list.length; i++) {
         if (fn(list[i], i, list)) {
             return list[i];

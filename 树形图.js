@@ -291,15 +291,25 @@ const regions = [{
     },
 ];
 
+// function convertToTree(regions, rootId = "0") {
+//     let resArr = []
+//     regions.forEach(element => {
+//         if (element.pid == rootId) {
+//             resArr.push(element)
+//             element.children = convertToTree(regions, element.id)
+//         }
+//     });
+//     return resArr
+// }
 function convertToTree(regions, rootId = "0") {
-    let resArr = []
-    regions.forEach(element => {
-        if (element.pid == rootId) {
-            resArr.push(element)
-            element.children = convertToTree(regions, element.id)
+    let reslut = []
+    regions.forEach(e => {
+        if (e.pid == rootId) {
+            reslut.push(e)
+            e.children = convertToTree(regions, e.id)
         }
-    });
-    return resArr
+    })
+    return reslut
 }
 let result = convertToTree(regions)
 console.log(result)
