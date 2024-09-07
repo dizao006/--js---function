@@ -72,6 +72,16 @@
         const cb = (entries) => {
             entries.forEach((a) => {
                 if (a.isIntersecting) {
+                    //进入视口
+                    /*
+                    - boundingClientRect: 被观察元素的矩形区域信息。
+                    - intersectionRatio: 被观察元素的可见部分与整个元素的比例。
+                    - intersectionRect: 可见部分的矩形区域信息。
+                    - isIntersecting: 布尔值，表示元素是否与根元素相交。
+                    - rootBounds: 根元素的矩形区域信息。
+                    - target: 被观察的目标元素。
+                    - time: 触发回调的时间戳。
+                    */
                     const imge = a.target
                     let src = imge.getAttribute('data-src')
                     imge.setAttribute('src', src)
@@ -79,7 +89,11 @@
                 }
             })
         }
-        const observer = new IntersectionObserver(cb);
+        const observer = new IntersectionObserver(cb, {
+            root: null, //具体容器，如果null则默认整个窗口
+            rootMargin: '20px',
+            threshold: 0//交叉比例
+        });
         img.forEach((e) => {
             observer.observe(e)
         })

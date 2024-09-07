@@ -36,7 +36,7 @@ class Events {
    */
   off(event, listener) {
     if (this._events[event]) {
-      this._events[event] = this.events[event].filter((item) => {
+      this._events[event] = this._events[event].filter((item) => {
         return item !== listener;
       });
     }
