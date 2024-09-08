@@ -2,8 +2,8 @@
     "compilerOptions": {
         "module": "commonjs",
         "experimentalDecorators": true,
-        "target": "es5", // 或者更高版本，如"es6"
-        "lib": ["es2015", "dom"], // 包含ES2015及更高版本的特性
+        "target": "es6", // 或者更高版本，如"es6"
+        "lib": ["es2016", "dom"], // 包含ES2015及更高版本的特性
     },
     "exclude": [
         "node_modules"
