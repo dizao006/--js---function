@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>简单路由示例</title>
+</head>
+
+<body>
+    <ul>
+        <li><a href="#/home">首页</a></li>
+        <li><a href="#/about">关于</a></li>
+    </ul>
+
+    <div id="content">选择一个链接</div>
+
+    <script>
+        function router() {
+            const content = document.getElementById('content');
+            switch (location.hash) {
+                case '#/home':
+                    content.innerHTML = '这是首页';
+                    break;
+                case '#/about':
+                    content.innerHTML = '这是关于页面';
+                    break;
+                default:
+                    content.innerHTML = '选择一个链接';
+            }
+        }
+
+        window.addEventListener('hashchange', router);
+        router(); // 初始化页面时也调用一次
+    </script>
+</body>
+
+</html>

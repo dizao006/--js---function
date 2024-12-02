@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+<script>
+    let p1 = new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(1);
+        }, 600);
+    });
+    let p2 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            reject("err, 2");
+            // resolve(2);
+        }, 500);
+    });
+    let p3 = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(3);
+        }, 1000);
+    });
+
+    async function proAct(arr) {
+        let task = [];
+        for (const p of arr) {
+            try {
+                let data = await p;
+                task.push(data);
+            } catch (err) {
+                task.push(err);
+            }
+        }
+        return task;
+    }
+
+    proAct([p1, p2, p3])
+        .then((task) => {
+            console.log(task);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+
+</script>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    /* .main {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .left {
+        width: 200px;
+        height: 100%;
+        background: red;
+        float: left;
+    }
+
+    .right {
+        width: 200px;
+        height: 100%;
+        background: blue;
+        float: right;
+    }
+
+    .content {
+        height: 100%;
+        width: calc(100% - 400px);
+        background: black;
+        float: left;
+    } */
+
+
+
+    /* 
+    .main {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .content {
+        flex: 1;
+        background: black;
+    }
+
+    .left {
+        width: 200px;
+        height: 100%;
+        background: blue;
+    }
+
+    .right {
+        width: 200px;
+        height: 100%;
+        background: red;
+    } */
+
+
+    .main {
+        display: grid;
+        grid-template-columns: 200px auto 200px;
+        grid-template-rows: 100vh;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .left {
+        background: red;
+        grid-area: 1/1/1/2;
+    }
+
+    .content {
+        background: black;
+        grid-area: 1/2/1/3;
+    }
+
+    .right {
+        background: blue;
+        grid-area: 1/3/1/4;
+    }
+
+    .container {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+        border: 1px solid;
+        overflow: auto;
+        padding: 10px;
+        margin: 20px;
+    }
+</style>
+
+<body>
+    <!-- <div class="main">
+        <div class="left"></div>
+        <div class="content"></div>
+        <div class="right"></div>
+    </div> -->
+
+    <div id="container" class="container">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla repellat porro
+        atque culpa rem sunt sed! Voluptates vel incidunt accusamus reiciendis aut, adipisci ut. Hic, impedit
+        officia.Quis, animi beatae. Facere dolorum quasi laborum, rem facilis illum necessitatibus sint doloribus beatae
+        exercitationem sapiente! Quod vel cupiditate quam libero, delectus natus.</div>
+    <button id="btn">111</button>
+    <button id="btn2">123123</button>
+</body>
+<script>
+    var container = document.getElementById("container");
+    console.log("scrollWidth:", container.scrollWidth); // scrollWidth: 220
+    console.log("scrollHeight", container.scrollHeight); // scrollHeight 372
+    container.onscroll = function (e) {
+        console.log(e.target.scrollTop)
+    }
+    let body = document.querySelector("body")
+    let btn = document.querySelector('#btn')
+    body.onclick = function (e) {
+        // console.log(e.screenX, e.screenY)
+        // console.log(e.clientX, e.clientY)
+
+    }
+    btn.onclick = function (e) {
+        console.log(e.offsetX, e.offsetY)
+    }
+    btn2.addEventListener("click", APiTime)
+    window.onload = () => {
+        console.log(performance)
+    }
+
+
+    function APiTime() {
+        const start = Date.now()
+        fetch("https://study.duyiedu.com/api/lyrics").then((res) => res.json()).then((data) => {
+            const end = Date.now() - start
+            console.log(end)
+            console.log(data)
+        })
+    }
+</script>
+
+</html>

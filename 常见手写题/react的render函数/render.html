@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- {
+  tag: 'DIV',
+  attrs:{
+  id:'app'
+  },
+  children: [
+  {
+  tag: 'SPAN',
+  children: [
+  { tag: 'A', children: [] }
+  ]
+  },
+  {
+  tag: 'SPAN',
+  children: [
+  { tag: 'A', children: [] },
+  { tag: 'A', children: [] }
+  ]
+  }
+  ]
+  }
+  把上诉虚拟Dom转化成下方真实Dom
+  <div id="app">
+    <span>
+      <a></a>
+    </span>
+    <span>
+      <a></a>
+      <a></a>
+    </span>
+  </div> -->
+</body>
+
+<script>
+
+  let obj = {
+    tag: 'DIV',
+    attrs: {
+      id: 'app'
+    },
+    children: [
+      {
+        tag: 'SPAN',
+        children: [
+          { tag: 'A', children: [] }
+        ]
+      },
+      {
+        tag: 'SPAN',
+        children: [
+          { tag: 'A', children: [] },
+          { tag: 'A', children: [] }
+        ]
+      }
+    ]
+  }
+
+
+
+  function _render(vNode) {
+    if (vNode instanceof Number) {
+      vNode = String(vNode)
+    }
+    if (typeof vNode === 'string') {
+      return document.createTextNode(vNode)
+    }
+    const dom = document.createElement(vNode.tag)
+    if (vNode.attrs) {
+      Object.keys(vNode.attrs).forEach((key) => {
+        const value = vNode.attrs[key]
+        dom.setAttribute(key, value)
+      })
+    }
+    if (vNode.children) {
+      vNode.children.forEach((child) => dom.appendChild(_render(child)))
+    }
+    return dom
+  }
+
+  console.log(_render(obj)) 
+</script>
+
+</html>

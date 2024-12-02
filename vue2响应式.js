@@ -1,34 +1,57 @@
 const obj2 = {
-    a: 1,
-    b: 2,
-    c: 3,
-    d: {
-        aa: 4,
-        dd: 9
-    }
-}
+  a: 1,
+  b: 2,
+  c: 3,
+  d: {
+    aa: 4,
+    dd: 9,
+  },
+};
 function isobj(obj) {
-    return typeof obj === 'object' && obj !== null && obj !== undefined
+  return typeof obj === "object" && obj !== null && obj !== undefined;
 }
+// function observe(obj) {
+//   for (const k in obj) {
+//     let v = obj[k];
+//     if (isobj(v)) {
+//       observe(v);
+//     }
+//     Object.defineProperty(obj, k, {
+//       get() {
+//         console.log("读取", k);
+//         return v;
+//       },
+//       set(val) {
+//         if (val !== v) {
+//           console.log("genggai");
+//           v = val;
+//         }
+//       },
+//     });
+//   }
+// }
+// observe(obj2);
+// obj2.a = 3;
+
 function observe(obj) {
-    for (const k in obj) {
-        let v = obj[k];
-        if (isobj(v)) {
-            observe(v);
-        }
-        Object.defineProperty(obj, k, {
-            get() {
-                console.log("读取", k)
-                return v
-            },
-            set(val) {
-                if (val !== v) {
-                    console.log('genggai')
-                    v = val
-                }
-            }
-        })
+  for (const key in obj) {
+    let v = obj[key];
+    if (isobj(v)) {
+      observe(v);
     }
+    Object.defineProperty(obj, key, {
+      get() {
+        return v;
+      },
+      set(val) {
+        if (val !== v) {
+          v = val;
+        }
+      },
+    });
+  }
 }
-observe(obj2)
-obj2.a = 3
+
+observe(obj2);
+obj2.a = 3;
+console.log(JSON.stringify(obj2, null, 2));

@@ -30,17 +30,16 @@ let arr = [1, 3, 2, 6, 4, 9, 8];
  * @param {Function} exchange 交换算法
  */
 function compare(a, b) {
-    return a < b ? true : false
+  return a < b ? true : false;
 }
 
 function exchange(arr, a, b) {
-    [arr[a], arr[b]] = [arr[b], arr[a]]
+  [arr[a], arr[b]] = [arr[b], arr[a]];
 }
-
 
 // 冒泡排序
 /**
- * 
+ *
  * @param {Function} maopao 冒泡排序每一轮都进行两两比较，将最小的或者最大的放到最前面或者最后面，每轮循环减去已经循环的次数，因为每一轮结束后不需要再比较最后或者开头一位
  * 适合用于部分数据是有序的，只有少部分是无序的
  */
@@ -58,7 +57,7 @@ function exchange(arr, a, b) {
 
 // 选择排序
 /**
- * 
+ *
  * @param {Function} selectSort 选择排序，每一轮都会找到最大或者最小的那个数放到最后面，
  * 适用于大部分数据都是无需的，数据越混乱，快速排序速度越快
  */
@@ -80,23 +79,24 @@ function exchange(arr, a, b) {
 // 快速排序
 
 // function quicklySort(arr) {
-//     if (arr.length == 0) {
-//         return arr
-//     }
-//     let zhong = arr[0]
-//     let left = []
-//     let right = []
-//     for (let i = 1; i < arr.length; i++) {
-//         if (arr[i] > zhong) right.push(arr[i])
-//         else left.push(arr[i])
-//     }
-//     left = quicklySort(left)
-//     right = quicklySort(right)
-//     return [...left, zhong, ...right]
+//   if (arr.length == 0) {
+//     return arr;
+//   }
+//   let zhong = arr[0];
+//   let left = [];
+//   let right = [];
+//   for (let i = 1; i < arr.length; i++) {
+//     if (arr[i] > zhong) right.push(arr[i]);
+//     else left.push(arr[i]);
+//   }
+//   left = quicklySort(left);
+//   right = quicklySort(right);
+//   return [...left, zhong, ...right];
 // }
-// console.time()
-// quicklySort(arr);
-// console.timeEnd()
+// console.time();
+// let data = quicklySort(arr);
+// console.log(data);
+// console.timeEnd();
 
 // 快速排序标准版  速度更快
 // function quickSort2(arr, start, end) {
@@ -129,3 +129,30 @@ function exchange(arr, a, b) {
 // quickSort(arr)
 // console.timeEnd()
 // console.log();
+
+function quicklySort(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+  let len = Math.floor(arr.length / 2);
+  let zhong = arr[len];
+  let left = [];
+  let right = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (i === len) {
+      // 跳过基准值
+      continue;
+    }
+    if (arr[i] >= zhong) {
+      right.push(arr[i]);
+    } else {
+      left.push(arr[i]);
+    }
+  }
+  left = quicklySort(left);
+  right = quicklySort(right);
+  return [...left, zhong, ...right];
+}
+
+let data = quicklySort([5, 2, 3, 1]);
+console.log(data);

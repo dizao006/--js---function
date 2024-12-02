@@ -8,7 +8,7 @@
 // console.log(add(1)(2));
 // //2 提前确认
 // //对时间绑定进行判断
-// var on = function (isSupport, element, ev ent, callback) { 
+// var on = function (isSupport, element, ev ent, callback) {
 //     isSupport = isSupport || document.addEventListener
 //     if (isSupport) {
 //         return element.addEventListener(event, callback, false)
@@ -43,8 +43,6 @@
 // console.log(curry(add)(1)(2)(3)(4));
 // console.log(curry(add, 1)(3, 4)(2));
 
-
-
 //面试题
 // function add() {
 //     let arg = Array.prototype.slice.call(arguments);
@@ -63,24 +61,21 @@
 // console.log(add(1)(2)(3)(4)(5).toString());
 
 //另外的写法  定参
-// function curry(fn) {
-//     return function _curry(...args) {
-//         if (args.length >= fn.length) {
-//             return fn.apply(this, args)
-//         } else {
-//             return function (...args2) {
-//                 return _curry.apply(this, args.concat(args2))
-//             }
-//         }
-//     }
-// }
-
-
-
+function curry(fn) {
+  //   return function _curry(...args) {
+  //     if (args.length >= fn.length) {
+  //       return fn.apply(this, args);
+  //     } else {
+  //       return function (...args2) {
+  //         return _curry.apply(this, args.concat(args2));
+  //       };
+  //     }
+  //   };
+}
 
 function add(x, y, z) {
-    return x + y + z
+  return x + y + z;
 }
-let s = curry(add)
-let restult = s(1, 2)(3)
-console.log(restult)
+let s = curry(add);
+let restult = s(1, 2)(3);
+console.log(restult);

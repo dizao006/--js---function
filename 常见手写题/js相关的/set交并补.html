@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    let set1 = new Set([1, 2, 3, 4, 6]);
+    let set2 = new Set([2, 6, 9, 10]);
+
+    let union = set1.union(set2); //并集
+    let intersection = set1.intersection(set2); //交集
+    let difference = set1.difference(set2); // 差集1
+    let isSubsetOf = set1.isSubsetOf(set2);//set1是否为set2的补集
+    let isSupersetOf = set2.isSupersetOf(set1) //返回布尔值与上面的这个一致
+
+    console.log('并集:', union); // Set { 1, 2, 3, 4, 6, 9, 10 }
+    console.log('交集:', intersection); // Set { 2, 6 }
+    console.log('差集1:', difference); // Set { 1, 3, 4 }
+    console.log('set1是否为set2的补集:', isSubsetOf); // false
+    console.log('set2是否为set1的补集:', isSupersetOf); // true
+
+    // 以下是ES6 Set的API
+    // union(otherSet) // 并集
+    // intersection(otherSet) // 交集
+    // difference(otherSet) // 差集
+    // has(value) // 判断集合中是否有该值
+    // add(value) // 添加值
+    // delete(value) // 删除值
+    // clear()
+</script>
+
+</html>

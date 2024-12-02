@@ -2,45 +2,45 @@
 //重新创建内存地址，新的数据不会影响另外的数据
 // 1 JSON.parse(JSON.stringify())
 let stu = {
-    name: 's',
-    deepStu: {
-        a: 2
-    },
-    say() {
-        console.log('asd')
-    }
-}
+  name: "s",
+  deepStu: {
+    a: 2,
+  },
+  say() {
+    console.log("asd");
+  },
+};
 // let stu2 = JSON.parse(JSON.stringify(stu))  //新拷贝的对象会丢失原来的方法
 // stu2.name = 'w'
 // console.log(stu2, stu)
 
 //递归写深拷贝
 function deepClone(target) {
-    let restult
-    if (typeof target === 'object') {
-        if (Array.isArray(target)) {
-            restult = []
-            for (const i in target) {
-                restult.push(deepClone(target[i]))
-            }
-        } else if (target == null) {
-            restult = null
-        } else if (target.constructor === RegExp || target.constructor === Date) {
-            restult = target
-        } else {
-            //说明是一个对象
-            restult = {}
-            for (const i in target) {
-                restult[i] = (deepClone(target[i]))
-            }
-        }
+  let restult;
+  if (typeof target === "object") {
+    if (Array.isArray(target)) {
+      restult = [];
+      for (const i in target) {
+        restult.push(deepClone(target[i]));
+      }
+    } else if (target == null) {
+      restult = null;
+    } else if (target.constructor === RegExp || target.constructor === Date) {
+      restult = target;
     } else {
-        restult = target
+      //说明是一个对象
+      restult = {};
+      for (const i in target) {
+        restult[i] = deepClone(target[i]);
+      }
     }
-    return restult
+  } else {
+    restult = target;
+  }
+  return restult;
 }
-let stu2 = deepClone(stu)
-console.log(stu2)
+let stu2 = deepClone(stu);
+console.log(stu2);
 //浅拷贝
 //只拷贝基本类型的数据，而引用类型复制后也会发生引用，浅拷贝只赋值某个对象的引用类型，而不复制对象本身，共享一块内存
 //1 直接赋值
@@ -52,8 +52,7 @@ console.log(stu2)
 // }
 // let stu2 = stu
 // stu2.name = 'w'
-// console.log(stu.name, stu2.name) 
-
+// console.log(stu.name, stu2.name)
 
 //2 object.assign
 // Object.assign(stu, {
@@ -75,7 +74,6 @@ console.log(stu2)
 // stu2.deepStu.a = 5
 // console.log(stu2, stu)
 
-
 //slice 与concat
 // let arr = [1, 3, 6, {
 //     a: 2
@@ -84,3 +82,31 @@ console.log(stu2)
 // arr2[0] = 100,
 //     arr2[3].a = 1000
 // console.log(arr, arr2)
+
+function deepClone(obj) {
+  let result;
+  if (typeof obj === "object") {
+    if (obj instanceof Array) {
+      result = [];
+      for (const key in obj) {
+        result.push(deepClone(obj[key]));
+      }
+    } else if (obj === null) result == null;
+    else if (obj.constructor === RegExp || obj.constructor === Date)
+      result = obj;
+    else {
+      result = {};
+      for (const key in obj) {
+        result[key] = deepClone(obj[key]);
+      }
+    }
+  } else {
+    result = obj;
+  }
+
+  return result;
+}
+
+const arr = [1, 3, 4];
+const arr2 = deepClone(arr);
+console.log(arr, arr2);
