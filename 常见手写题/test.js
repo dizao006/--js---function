@@ -34,6 +34,21 @@
 
 // // console.log(String(obj));
 
+// 测试为对象类型
+const obj = {
+  [Symbol.toPrimitive]: function () {
+    return "abc";
+  },
+  valueOf: function () {
+    return "bcd";
+  },
+  toString: function () {
+    return "cde";
+  },
+};
+
+console.log(obj + 1);
+
 // /**
 //  * Definition for a binary tree node.
 
