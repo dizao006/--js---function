@@ -8,6 +8,7 @@
 </head>
 
 <body>
+    <progress id="prog" max="100" value="50" style="width: 300px;"></progress>
     <input type="text">
 </body>
 <script>
@@ -30,7 +31,16 @@
         console.log('end')
         isComposition = false
         search()
+        const blob = new Blob([inp.value])
+        let startFive = blob.slice(0, 6)
+        let read = new FileReader()
+        read.readAsText(startFive)
+        read.onload = function (e) {
+            console.log(e.target.result)
+        }
     })
+
+
 </script>
 
 </html>

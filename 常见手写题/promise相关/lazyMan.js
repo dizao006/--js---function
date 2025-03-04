@@ -42,7 +42,7 @@ class LayM {
     return this;
   }
   sleepFirst(time) {
-    this.queue.push(() => {
+    this.queue.unshift(() => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           console.log(`Wake up after ${time}`);
@@ -66,9 +66,9 @@ class LayM {
     }, 0);
   }
 }
-// const LazyMan = (name) => new LayM(name);
-// // LazyMan("Hank").sleepFirst(5).eat("supper");
-// // LazyMan("Hank").eat("dinner").eat("supper");
+const LazyMan = (name) => new LayM(name);
+LazyMan("Hank").sleepFirst(5).eat("supper");
+// LazyMan("Hank").eat("dinner").eat("supper");
 // LazyMan("c2c").sleep(2).eat("s");
 
 function deely(fn, time) {
@@ -80,4 +80,4 @@ function deely(fn, time) {
   });
 }
 
-deely(() => console.log("end"), 1000);
+// deely(() => console.log("end"), 1000);

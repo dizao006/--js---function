@@ -32,17 +32,19 @@ async function uploadChunk(chunks, fileName) {
     formData.append("fileName", fileName);
     formData.append("totalChunks", totalChunks);
 
+    // 实际上blob就是文件的具体数据，我们要上传的也是blob，只不过blob需要放在fromData中上传，如果像读取内容的话，需要借助fileReader，或者下面的方式
+    // console.log(chunks[index].blob, "formData");
+    // const text = await new Response(chunks[index].blob).text();
+    // const text = await chunks[index].blob.text();
+    // console.log(text, "formData");
     const task = axios.post("http://127.0.0.1:3000/upload", formData);
     taskPool.push(task);
-
     if (taskPool.length >= max) {
       await Promise.race(taskPool);
       taskPool = taskPool.filter((t) => t.status !== "fulfilled");
     }
-
     index++;
   }
-
   await Promise.all(taskPool);
 }
 

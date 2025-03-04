@@ -16,6 +16,7 @@ export function createChunk(file, i, CHUNK_SIZE) {
       // }
 
       // console.log(binaryString); // 输出二进制数据的十六进制表示
+      // console.log(e.target.result, "e.target.result");
       spark.append(e.target.result); //针对每一个分片进行md5编码
       resolve({
         start,

@@ -1,0 +1,5403 @@
+# h5+c3
+
+a标签：
+
+```html
+<a href='#s1'></a>
+
+a标签的锚点用法，href写要转跳的锚点id#id形式
+
+<div id='s1'>
+    
+</div>
+```
+
+| line-height     | normal、number、length、%                             | 设置行高                           |
+| --------------- | ----------------------------------------------------- | ---------------------------------- |
+| text-indent     | length、%                                             | 设置文本缩进                       |
+| text-align      | left、right、center、justify、start、end              | 设置对齐方式                       |
+| letter-spacing  | normal、length                                        | 设置字符间距                       |
+| text-decoration | line、color、style、thickness                         | 设置文本修饰                       |
+| white-space     | normal、pre、nowrap、pre-wrap、pre-line、break-spaces | 规定如何处理空白                   |
+| line-break      | auto、loose、normal、strict、anywhere、unset          | 处理如何断开带有标点符号的文本的行 |
+
+针对图片的模糊
+
+  `imgs[i].style.filter = "blur(0px)"`
+
+选择器
+
+div>item  `div下的item儿子，不包括孙子`
+
+div item` div下的全部item`
+
+div.item `div并且是item的元素`
+
+div+p `div紧紧相邻的p兄弟元素(向下)`
+
+div~p `div所有的p兄弟元素`
+
+属性选择器
+
+当然也可以选择自定义属性的情况
+
+[option:selected]
+
+[title] `选中所有具有title属性的选择器`
+
+[title='a'] `选中自定义属性title=a的元素`
+
+[title^='a'] `选中以a开头的` 
+
+[title$='a'] `选中以a结尾的`
+
+[title*='a'] `选中包含a的` 
+
+<div title='a'>
+
+伪类选择器
+
+
+
+a:link `选中没有访问的`
+
+a:hover `悬浮`
+
+a:visited `访问过之后的`
+
+a:active `激活的时候`
+
+a:focus `聚焦`
+
+div:first/last-child ` div下的第一个元素`
+
+div:nth-child() `第n个元素`
+
+div>p:first/last-of-type`选中第一个p元素类型的元素`
+
+span:only-child() `选中span是唯一孩子的元素`
+
+div:not(.fail/[title='xxx'])  `选中div元素，排除身上有fail的`
+
+a:checked  `动态样式，选中的时候加上样式`
+
+input:disable  `选中禁用的input`
+
+div:target `选中点击所指向的`
+
+伪元素选择器
+
+div::first-letter`选中第一个div下的字母`
+
+div::first-line `选中第一行`
+
+div::selection `被鼠标选择的单词`
+
+input::placeholder `提示文字`
+
+div::before/after {
+
+content：''  必写
+
+}`再div之前添加一个元素`
+
+display: none;`这个属性会完全移除元素，使其不再占据任何空间，也不会响应任何事件`
+
+opacity:0` 透明度 注意如果使用display：none的话，会破坏结构，使用opacity不会影响位置但仍保持交互效果`
+
+ visibility: hidden`使用这个属性，元素会被隐藏，但它仍然会占据页面上的空间，但是无法与用户进行相应`
+
+resize：[horizontal |vertical|both]`both可以进行拖拽放大或者缩小，但必须加上overflow属性`
+
+background-size：cover
+
+文本：换行：
+
+white-space：pre|pre-warp|nowrap  `按原文显示`
+
+聚焦document.querySelector('.code').focus();
+
+失去聚焦： document.getElementById('myInput').blur();
+
+溢出处理：
+
+```js
+单行文本溢出
+display：block   //块盒才行
+white-space:nowrap
+overflow:hidden
+text-overflow:[clip|ellipsis]   //使用text-overflow必须要协商overflow
+```
+
+```css
+多行文本溢出显示
+  display: -webkit-box;  //将元素设置为盒子模型
+    -webkit-line-clamp: 3; /* 限制文本的行数，这里是3行 */
+    -webkit-box-orient: vertical; /* 子元素垂直排列，这是多行文本垂直显示的关键 */
+    overflow: hidden; /* 隐藏溢出的内容 */
+    text-overflow: ellipsis; /* 显示省略号 */
+
+//setProperty方法：
+var declaration = document.styleSheets[0].rules[0].style;
+declaration.setProperty("margin", "1px 2px");
+
+
+ const text = document.querySelector(".more2_info_name"); 
+      text.style.overflow = "hidden"; //超出部分隐藏
+      text.style.setProperty("-webkit-line-clamp", "2"); //规定为两行
+      text.style.overflow = "ellispsis"; //超出部分用省略号
+```
+
+## 过渡和动画
+
+使用过渡和动画，可以让css属性变化更加丝滑
+
+**过渡和动画无法对所有的CSS属性产生影响，能够产生影响的只有数值类属性**，例如：颜色、宽高、字体大小等等
+
+## 过渡
+
+> [MDN详细文档](https://developer.mozilla.org/zh-CN/docs/Web/CSS/transition)
+
+```css
+transition: 过渡属性 持续时间 过渡函数 过渡延迟
+dom中
+div.ontransitionend = function(){
+  console.log("过渡结束后触发");
+}
+```
+
+- **过渡属性**
+
+  针对哪个css属性应用过渡。例如填写`transform`，则表示仅针对**transform**属性应用过渡。
+
+  若填写`all`或不填写，则表示针对所有css属性都应用过渡
+
+- **持续时间**
+
+  css属性变化所持续的时间，需要带上单位。例如`3s`表示3秒，`0.5s`或`500ms`均表示500毫秒
+
+- **过渡函数**
+
+  本质是css属性变化的贝塞尔曲线函数，通常直接使用预设值：
+
+  `ease-in-out`：平滑开始，平滑结束
+
+  `linear`：线性变化
+
+  `ease-in`：仅平滑开始
+
+  `ease-out`：仅平滑结束
+
+- **过渡延迟**
+
+  书写规则和持续时间一样，表示过渡效果延迟多久后触发，不填则无延迟
+
+**在JS中，可以监听元素的`transitionstart`和`transitionend`事件，从而在过渡开始和过渡结束时做一些别的事情**
+
+## 动画
+
+> [MDN详细文档](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Animations)
+
+**动画的本质是预先定义的一套css变化规则，然后给该规则取个名字**
+
+![image-20210513172902413](http://mdrs.yuanjin.tech/img/20210513172902.png)
+
+然后，其他元素即可使用这样的规则：
+
+```css
+animation: 规则名 持续时间;
+```
+
+在应用规则时，还可以指定更多的信息
+
+```css
+animation: 规则名 持续时间 重复次数 时间函数 动画方向 延迟时间
+playAnimate.onclick = function(){
+  oDiv.style.animationPlayState = "running"  //播放
+}
+pauseAnimate.onclick = function(){
+  oDiv.style.animationPlayState = "paused" //暂停
+}
+```
+
+一些细节：
+
+- 定义规则时，`0%`可以书写为`from`
+- 定义规则时，`100%`可以书写为`to`
+- 重复次数为`infinite`时，表示无限重复
+- 动画方向为`alternate`时，表示交替反向，第1次正向，第2次反向，第3次正向，第4次方向，以此类推
+
+**在JS中，可以监听元素的`animationstart`和`animationnend`事件，从而在过渡开始和过渡结束时做一些别的事情**
+
+
+
+2d变换
+
+```css
+/* 设置渐变背景，方向：从上到下，颜色：从#e66465渐变到#9198e5 */
+background: linear-gradient(to bottom, #e66465, #9198e5);
+使用scroll-behavior: smooth，可以让滚动更加丝滑
+
+transfrom：translate(x,y) 水平垂直移动
+```
+
+通过`transform`属性，可以使盒子的形态发生变化
+
+该属性支持多种变形方案，常见的有:
+
+- translate，平移
+- scale，缩放
+- rotate，旋转
+- skew，倾斜（transform:skew(30deg,20deg)）
+
+**无论是哪一种transform，都只是视觉效果的变化，不会影响盒子的布局**
+
+**transform不会导致浏览器重绘和重排，并且调用gpu进行渲染，因此效率极高**
+
+translate 平移
+
+使用`translate`可以让盒子在原来位置上产生位移，类似于相对定位
+
+![image-20210512140622630](http://mdrs.yuanjin.tech/img/20210512140643.png)
+
+scale 缩放
+
+使用`translate`可以让盒子在基于原来的尺寸发生缩放
+
+![image-20210512141500499](http://mdrs.yuanjin.tech/img/20210512141500.png)
+
+rotate 旋转
+
+使用`rotate`属性可以在原图基础上进行旋转
+
+```css
+/* 在原图的基础上，顺时针旋转45度角 */
+transform: rotate(45deg); 
+/* 在原图的基础上，顺时针旋转半圈 */
+transform: rotate(0.5turn); 
+dom操作transform属性
+ dom.style.transform=`rotate()`
+```
+
+可以点击下面的按钮试一下旋转效果
+
+<iframe src="http://mdrs.yuanjin.tech/html/css-manual/rotate.html" style="height:400px;">
+
+动画
+
+
+
+的本质是预先定义的一套css变化规则，然后给该规则取个名字**
+
+![image-20210513172902413](http://mdrs.yuanjin.tech/img/20210513172902.png)
+
+然后，其他元素即可使用这样的规则：
+
+```css
+animation: 规则名 持续时间;
+```
+
+在应用规则时，还可以指定更多的信息
+
+```css
+animation: 规则名 持续时间 重复次数 时间函数 动画方向 延迟时间
+js操作 
+  <input id="range" type="range" min="1" max="10" value="1" step="1"/>
+    an.style.animationDuration = time + 's'
+```
+
+一些细节：
+
+- 定义规则时，`0%`可以书写为`from`
+- 定义规则时，`100%`可以书写为`to`
+- 重复次数为`infinite`时，表示无限重复
+- 动画方向为`alternate`时，表示交替反向，第1次正向，第2次反向，第3次正向，第4次方向，以此类推
+
+**在JS中，可以监听元素的`animationstart`和`animationnend`事件，从而在过渡开始和过渡结束时做一些别的
+
+
+
+css3属性`object-fit`可以控制**多媒体内容和与元素**的适应方式，通常应用在`img`或`video`元素中
+
+一图胜千言
+
+下图中的所有`img`元素均被固定了宽高，溢出img的部分实际上均不会显示
+
+![image-20210514134908778](http://mdrs.yuanjin.tech/img/20210514134908.png)
+
+多列布局：
+
+```
+column-count：5   //指定每列数
+column-width：220px// 指定每一列的宽度
+column-gap：10px  // 列间距
+cloumn-rule：宽度，样式，颜色
+cloumn-span：all  //横跨全部列
+```
+
+媒体查询
+
+```css
+// 只有在打印机的时候才会使用
+@media print
+//屏幕上
+@media screen
+
+   当检测到视口宽度小于等于700时
+    @media(max-width:700px){
+        应用样式
+}
+ 当检测到视口宽度大于等于700时
+  @media(min-width:700px){
+        应用样式
+}
+// 屏幕的宽度
+@media （device-width）
+```
+
+flex:
+
+```css
+flex布局
+display:flex;
+justify-content:
+align-items: 设置父容器整体的 ;
+多轴情况
+align-content: 更多关注行与行之间的对其方式;
+justify-items :关注多行情况下
+子元素
+align-self: 设置单个子容器;
+justify-self：设置单个容器
+order：排序
+
+flex-wrap:wrap 换行
+flex-direction：主轴换行
+flex ：1   设置伸缩比例
+```
+
+grid：
+
+```css
+dispaly:grid;
+ grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+ grid-template-rows: 1fr 1fr 1fr 1fr 1fr;   //设置行和列
+gap: 10px 20px; /* 行间隙为10px，列间隙为20px */
+
+对子元素使用
+ justify-self: flex-end;  控制位置
+  align-self: flex-end;
+grid-area:行开始 列开始 行结束 列结束
+ grid-row: 5/6; 从第几列到第几列  同时可以改变开始的位置，后面的也会延后
+ grid-column: 1/6;
+order:排序
+```
+
+## 布局
+
+![image-20210511102549096](http://mdrs.yuanjin.tech/img/20210511102802.png)
+
+**浮动**：做文字环绕效果
+
+**弹性盒**：单行或单列布局
+
+**网格**：多行多列布局
+
+## 弹性盒
+
+> 详细文档见[MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Flexible_Box_Layout)
+>
+> [弹性盒小游戏](https://flexboxfroggy.com/)
+>
+> flex-direcition:改变主轴（row column reverse）
+>
+> justify-content  ：主轴排列  start  end space-between  space-raound center
+>
+> align-items：flex-start  -end center 
+>
+> order：改变先后顺序
+> justify-self  与 align-self  可以改变单个数据的位置  flex-end   center  -flex sarter
+
+### 生成弹性容器和弹性项目
+
+![image-20210511112624876](http://mdrs.yuanjin.tech/img/20210511112624.png)
+
+**默认情况下，**弹性项目沿着主轴依次排列，侧轴拉伸
+
+### 更改方向
+
+通过`flex-direction`可更改主轴方向
+
+![image-20210511112510632](http://mdrs.yuanjin.tech/img/20210511112510.png)
+
+### 主轴排列
+
+通过`justify-content`属性，可以影响主轴的排列方式
+
+![image-20210511113617325](http://mdrs.yuanjin.tech/img/20210511113617.png)
+
+### 侧轴排列
+
+通过`align-items`属性，可以影响侧轴的排列方式
+
+![image-20210511114016304](http://mdrs.yuanjin.tech/img/20210511114016.png)
+
+### 弹性项目伸缩
+
+所谓伸缩，是指在**主轴方向**上，当**弹性容器**有**额外空间**时，是否需要拉伸，当**空间不足**时，是否需要**压缩**
+
+在**弹性项目**上使用`flex`属性，可设置拉伸和压缩比例：`flex: 拉伸比例 压缩比例 初始尺寸`
+
+拉伸示例：
+
+![image-20210511120916571](http://mdrs.yuanjin.tech/img/20210511120916.png)
+
+压缩示例：
+
+![image-20210511121459341](http://mdrs.yuanjin.tech/img/20210511121459.png)
+
+默认情况下，`flex: 0 1 auto`
+
+### 主轴换行
+
+默认情况，当主轴剩余空间不足时，按照压缩比例进行压缩，但如果设置了主轴换行，则不会压缩，直接换行显示
+
+给**弹性容器**设置`flex-wrap: wrap`，即可主轴换行
+
+<img src="http://mdrs.yuanjin.tech/img/20210511123310.png" alt="image-20210511123310673" style="zoom:50%;" />
+
+> 尽管如此，多行多列仍然推荐使用网格布局
+
+## 网格
+
+> [MDN详细文档](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Grid_Layout)
+>
+> [阮一峰网格布局教程](http://www.ruanyifeng.com/blog/2019/03/grid-layout-tutorial.html)
+>
+> [网格布局小游戏](https://cssgridgarden.com/)
+>
+> grid-template-columns 设置列
+> grid-template-rows设置行
+>
+> grid-columns; 列开头/列结尾
+> grid-row: 行开头/行结尾
+>
+> grid-template：行开头 行结尾 / 列开头 列结尾
+>
+> grid-auto-flow: column  改变主轴方向
+>
+> grid-area：行开头 行结尾/列开头 列结尾
+> gap: 10px 20px; /* 行间隙为10px，列间隙为20px */
+> justify-items 设置行
+> align-content：设置列
+
+**网格布局是多行多列布局的终极解决方案**
+
+### 生成网格布局
+
+<img src="http://mdrs.yuanjin.tech/img/20210511165317.png" alt="image-20210511165317363" style="zoom:50%;" />
+
+容器生成网格布局后，其所有子元素为**网格项目**
+
+### 定义行和列
+
+`grid-template-rows`：定义行
+
+`grid-template-columns`：定义列
+
+**它们的语法是相同的**
+
+![image-20210511172305100](http://mdrs.yuanjin.tech/img/20210511172305.png)
+
+### 改变排列方向
+
+使用属性`grid-auto-flow: column`，可使子元素按列排放
+
+<img src="http://mdrs.yuanjin.tech/img/20210511173447.png" alt="image-20210511173447321" style="zoom:50%;" />
+
+### 单元格之间的间隙
+
+```css
+row-gap: 10px; /* 行间隙为10px */
+column-gap: 20px; /* 列间隙为20px */
+gap: 10px 20px; /* 行间隙为10px，列间隙为20px */
+```
+
+![image-20210512132025687](http://mdrs.yuanjin.tech/img/20210512132025.png)
+
+### 单元格内部的对齐
+
+默认情况下，网格项目在单元格内部水平和垂直拉伸，以撑满单元格
+
+可以使用属性`justify-items`设置**水平方向**的排列方式
+
+可以使用属性`align-items`设置**垂直方向**的排列方式
+
+它们的可取值是相同的：
+
+```css
+网格项目对其
+justify-items: start 左 | end 右 | center 中 | stretch 拉伸;
+align-items: start 上 | end 下 | center 中 | stretch 拉伸;
+
+针对网格对齐
+justify-content：
+align-content:
+```
+
+<img src="http://mdrs.yuanjin.tech/img/20210511174450.png" alt="image-20210511174450356" style="zoom:50%;" />
+
+可以使用速写属性`place-items: 垂直对齐方式 水平对齐方式`同时设置这两个值
+
+```css
+place-items: start center; /* 垂直靠上，水平居中 */
+```
+
+### 网格项目定位
+
+默认情况下，网格项目依次排列到单元格中，每个网格占据一个单元格
+
+但可以对网格项目设置`grid-area`属性来改变这一行为
+
+使用方式为：
+
+```css
+grid-area: 起始行线编号/起始列线编号/结束行线编号/结束列线编号;
+```
+
+<img src="http://mdrs.yuanjin.tech/img/20210511180028.png" alt="image-20210511180027983" style="zoom:50%;" />
+
+## 一些js用法
+
+window.scrollTo(x,y) `使得页面滚动到指定的位置`
+
+eval()  `将传入的字符串当作js执行`
+
+scrollxy  `只读属性`
+
+clientHeight - `对应于clientWidth，这个属性指的是元素的内部高度，同样不包括边框和内边距`。
+offsetWidth - `这个属性返回元素的宽度，包括边框和水平滚动条（如果存在的话）。`
+offsetHeight - `对应于offsetWidth，这个属性返回元素的高度，包括边框和垂直滚动条（如果存在的话）`。
+scrollWidth -` 元素的滚动宽度，即内容区域的总宽度，可能比clientWidth大，如果内容超出了元素的可见宽度。`
+scrollHeight - `元素的滚动高度，即内容区域的总高度，可能比clientHeight大，如果内容超出了元素的可见高度。`
+
+document.querySelector('input[type=checkbox]') `可以使用类似这样的选择方式拿到特定的dom`
+
+childNodes/children /parentNode/parentElement `获取dom节点的子节点`
+
+dom.querySelector`可以获取指定元素下的对应dom`
+
+dom.selectedIndex `select元素当前选择的第几个option的索引`  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+对于select 和option元素 dom.querySelectorAll('option:checked')`可以选中被选中的元素`
+
+ dom.removeChild(options2[i])
+  dom.appendChild(options2[i])
+
+Element.remove()   **Element.remove()** 方法，把对象从它所属的 DOM 树中删除。
+
+element.insertAdjacentHTML(position, text);
+
+```js
+可以去了解一下insertAdjacentHTML，可以不需要创建dom元素，直接按照html解析模板字符串加入到某个位置
+
+element.insertAdjacentHTML(position, text);
+
+'beforebegin'：元素自身的前面。
+
+'afterend'：元素自身的后面。
+
+'afterbegin'：插入元素内部的第一个子节点之前。
+
+'beforeend'：插入元素内部的最后一个子节点之后。
+
+
+
+还有要注意querySelector里面可以写css获取节点的方法，例如.list>.row:last-child list下面的row里面的最后一个元素
+
+还要注意parentNode与childNodes获取对应的父子节点
+
+```
+
+## 关于日期函数
+
+
+
+```js
+let date=new Date()
+let year=date.getFullYear()
+let mounth=date.getMonth()
+let day=date.getDay()
+let hours=date.getHours()
+let minutes=date.getMinutes()
+let miao=date.getSeconds()
+let haomiao=date.getMilliseconds()
+```
+
+## 字符串
+
+```js
+string
+charCodeAt() 转换为unicode码
+endsWitdh()  startsWidth 判断是否以特定的字符串结尾或开头 返回ture或者false str.endsWitdh('best')
+fromCharCode() 指定的utf-16编码转化成对应的字符String.fromCharCode(97)//a
+includes()是否能查到另一个字符串
+indexof()查找指定字符串的位置
+match()，matchAll()检索字符串与正则表达式进行匹配的结果
+padEnd() padStart()   从字符串末尾/开始填充str1.padEnd(25, '.')
+replace() replaceAll() 可以与正则表达式相结合 替换字符串
+slice() 提取
+search() 执行正则表达式的查询，查询到返回正数str.search(re)
+split() split(' ') split(',') 拆分字符串
+toLowerCase()与toUpperCase()  转换大小写
+```
+
+## 数字
+
+```js
+isNaN() 判断是否为nan
+parseFloat() 返回浮点数
+parseInt() 传入一个字符串，返回一个指定基数的正数 Number.parseInt('111',2) //7
+toFixed() 保留几位小数 四舍五入
+toPrecision() 表示以指定精度展示， 123.126.toPrecision(4)//123.1
+```
+
+
+
+
+
+**arr.flat()** `方法创建一个新的数组，并根据指定深度递归地将所有子数组元素拼接到新的数组中`。
+
+​    span.style.opacity = opacity
+
+​    span.style.transform = `rotate(${deg}deg)`   设置透明度和设置旋转角度
+
+element.dataset.id  `这个dataset属性，用来针对自定义属性例如date-id="1"这样data开头的数据，可以直接对数据进行赋值，从而不需要使用setAttribute进行赋值，同时也可以交换两个变量避免使用第三中间量  `
+
+尺寸集合
+
+```js
+dom 尺寸和位置
+只读：
+clientWidth 和clientHeight    //元素可视部分的宽度和高度包括padding
+offsetWidth和offsetHeight     //包括padding与border
+clientTop和clientLeft         //元素border的宽高
+offsetLeft和offsetTop		// 距离自己祖先元素上边和左边的距离
+scrollHeight和scollWidth		// 当内容超出形成滚动条的时候，获取整个内容区域的高度
+可读可写：
+scrollTop和scrollLeft         //当元素内容超出时，元素被卷起的宽度和高度，点击回到页面顶部效果
+event事件对象相关尺寸
+clientX 与clientY               //事件发生时，鼠标点击位置相对于浏览器可视区域的坐标，左上角00，以左上角为原点进行计算
+screenX与screenY				//相对于屏幕的位置
+offsetX与offsetY               //相对于dom元素的位置
+pageX与pageY					//如果没有滚动条时，与clientxy一直，如果存在滚动条则大于clinex
+ 
+
+```
+
+
+
+## 正则表达式：
+
+```js
+ let reg = /\d+/g;
+new RegExp(/ab+c/, "i"); // 可以为表达式传入构建出正则
+ let s = '12346asda12347asd1234'
+ console.log(reg.test(12345))  测试是否能通过正则的检查 返回true或者flase
+ console.log(reg.exec(s));  //会返回一个数组，包括匹配到的字符
+//字符串中的正则
+
+//得到所有的匹配结果
+// let result= s.match(reg)  
+// console.log(result)   返回一个数组，返回满足的全部字符串
+
+
+//返回匹配的第一个下标
+// let result=s.search(reg) 
+// console.log(result)
+
+//分割
+// let b='asd_asdasd\tasdzxcm asd;l asd qwe,asd'
+//  let result=b.split(/[\_\t;, ]/g)   
+//  console.log(result)   
+
+//替换
+// let b='asd_asdasd\tasdzxcm asd;l asd qwe,asd'
+// let resut=b.replace(/[\_\t; ]/g,',')
+// console.log(resut)
+
+// let c = 'hello world' //replace 第二个参数可以写成函数的形式，函数的参数是匹配到的结果
+// let result = c.replace(/\b[a-z]/g, (e) => {
+//     return e.toUpperCase()
+// })
+// console.log(result)
+
+
+
+
+
+
+
+// test
+// 匹配中文
+// let regs = /[\u4e00-\u9fa5]/g //其中\u4e00-\u9fa5是中文字符的范围
+// var ss = 'asdasdasdas阿松大阿松大asdqw请问qweqwe仔细擦拭的'
+// const result= ss.match(regs)
+// console.log(result)
+
+// 过滤敏感词
+//替换
+// let arr = ['傻逼', '2b', '贸易战', '卢本伟']
+
+// function removewords(s, world) {
+//     let reg = new RegExp(arr.join('|'), 'g')
+//     return s.replace(reg, world)
+// }
+
+
+// let resa = removewords('asdasd傻逼asdasd2basdas贸易战asdasd卢本伟', '****')
+// console.log(resa)
+
+
+const _searchStrIndexOf = (str, target) => {
+    // 补全代码
+    let reg =new RegExp(target, 'g')
+    let s = str.match(reg, target)
+    return s.length
+}
+_searchStrIndexOf('sdffgfdfdgfdw', 'fd')
+
+// let re=/fd/g
+// let str='sdffgfdfdgfdw'
+// console.log(str.match(re)) 
+
+// 一些特殊一点的正则用法
+// \s \S   \s 是匹配所有空白符，包括换行，\S 非空白符，不包括换行。
+// \w 匹配字母、数字、下划线。等价于 [A-Za-z0-9_]
+// . 匹配除换行符 \n 之外的任何单字符。要匹配 . ，请使用 \. 。
+// /b 定界符可以搜索以什么开头或者结尾的    /ber   erver->er
+// 例如 \w+er\b  ever   意思是搜索以er结尾的数据
+
+// let asd = 'erver asdasder asddasder sader erasd asd aer'
+// let regs = /\w+er\b/g
+// console.log(asd.match(/\ber\w+/g));
+```
+
+## axios api
+
+```js
+   a1.onclick = async function () {
+        await axios.get(hero).then((e) => {
+            console.log(e.data.data)
+        })
+    }
+    a2.onclick = async function () {
+        await axios.post(login, {
+            headers: {
+                'a': 1
+            },
+            data: {
+                loginId: 'dizao06',
+                loginPwd: 'dizao06',
+                nickName: 'dizao'
+            },
+            timeout: 1000,  //超时时间
+        }).then((e) => {
+            console.log(e.data)
+        })
+    }
+    
+    axios.interceptors.request.use(function (config) {
+        //请求拦截器,请求发送之前做什么
+        const token = localStorage.getItem('token');
+        if (token) {
+            config.headers.authorization = token
+            //请求之中加入token
+        }
+        return config
+    })
+    axios.interceptors.response.use(function (resp) {
+        console.log('asd', resp.code)
+        // 拿到响应结果之后做什么
+        return resp
+    }, function (err) {
+        console.log(err)
+    })
+    // ((async function () {
+    //     //使用parmas传递参数，会自动再url后面加上参数
+    //     //https://study.duyiedu.com/api/user/exists?loginId=abc
+    //     axios.get('https://study.duyiedu.com/api/user/exists', {
+    //         params: {
+    //             loginId: 'abc'
+    //         }
+    //     }).then((e) => {
+    //         console.log(e.data)
+    //     })
+    // })())
+```
+
+## fetch api
+
+```js
+//get方法，注意fetch需要then两次才能拿到数据结果
+f1.onclick = async function () {
+        await fetch('https://study.duyiedu.com/api/herolist', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'content-type': 'application/json; charset=utf-8'
+            },
+        }).then((response) => {
+            return response.json();
+        }).then((e) => {
+            console.log(e)
+        })
+    }
+//post
+    f2.onclick = async function () {
+        await fetch(login, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'content-type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify({
+                loginId: 'dizao06',
+                loginPwd: 'dizao06',
+                nickName: 'dizao'
+            })
+        }).then((e) => {
+            console.log(e)
+            return e.json()
+        }).then((s) => {
+            console.log(s)
+        })
+    }
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# vue3的备战
+
+## v-html指令
+
+```
+当需要进行高亮显示的时候，由于使用replaceAll替换匹配到的字符为html的样式，如果直接{{}}的形式写入到页面，只会当成字符串来执行，需要使用v-html来把字符串当html进行解析
+```
+
+
+
+## 1通讯方式
+
+## 0 props :
+
+```js
+在父组件定义的响应式数据，通过在组件上写上属性进行传递
+parent:
+<child a="date">
+ 
+    
+    
+    
+child:
+//子组件需要以这样的形式进行接收父组件传递的数据，同时可以接收多个数据，他返回一个对象，里面包含所有传来的数据,仍然是响应式的
+使用了 <script setup> 的组件是默认私有的：一个父组件无法访问到一个使用了 <script setup> 的子组件中的任何东西，除非子组件在其中通过 defineExpose 宏显式暴露
+
+注意注意，如果你使用的是传统的comp api使用的是setup函数，需要这么写
+在setup函数情况下，会传入两个参数，props里面有你传入的所有数据
+context上下文包括arrts，父组件给子组件但是没有接受，slots插槽，emit触发自定义事件，expose函数
+export default {
+  props: ["temp"],
+  setup(props, context) {
+    console.log(props.temp, context.attrs);
+    return {};
+  },
+};
+而使用setup语法糖的时候需要这么写，默认宏函数，不需要导入
+let x=defineProps(['a'])    
+
+
+两个例子 进行对比
+父亲
+  <childrenVue :date="arr" :change="change"></childrenVue>
+  <children :date="arr" :change="change"></children>
+ let arr = ref(["a", "b", "c", "d", "e"]);
+    function change(val) {
+      arr.value.push(val);
+    }
+setup语法糖方式
+let pro = defineProps(["date", "change"]);
+let { date, change } = pro;
+
+setup函数形式
+export default {
+  props: ["date", "change"],
+  setup(props, ctx) {
+    let { date, change } = props;
+    return { date, change };
+  },
+};
+
+```
+
+
+
+## 1：v-model形式
+
+```js
+再了解这个之前，我们先了解一下vue的双向绑定原理
+以一个input为例
+正常情况下我们写input是这样的
+  <input type="text" v-model="fatherName">
+  但是其内部原理是这样写的，为了简化操作，于是将这两个式子写成了上述的语法
+其底层原理就是：vlaue值配合input事件
+ <input
+    type="text"
+    :value="fatherName"
+    @input="fatherName = $event.target.value"
+  />
+
+        
+对于组件上的v-model是这样写的
+setup语法糖
+父:
+  <vmodelsVue
+    :modelValue="fatherName"
+    @update:modelValue="fatherName = $event"
+  ></vmodelsVue>
+等价于
+  <vmodelsVue v-model="fatherName"></vmodelsVue>
+子：
+  <input
+    type="text"
+    :value="modelValue"
+    @input="emit('update:modelValue', $event.target.value)"
+  />
+        defineProps(["modelValue"]);
+let emit = defineEmits(["update:modelValue"]);
+setup函数   
+父：  <vmodelVue v-model="childNmae"></vmodelVue>
+子：
+<input type="text" :value="modelValue" @input="inp($event)" />
+ props: ["modelValue"],
+  emits: ["update:modelValue"],
+  setup(props, { emit }) {
+    let { childNmae } = props;
+    function inp(e) {
+      console.log(e.target.value);
+      emit("update:modelValue", e.target.value);
+    }
+    return {
+      childNmae,
+      inp,
+    };
+  },
+};
+
+注意哦，只要你写的是v-model=“xx”，不管这个xx是什么，你在子组件收到的只能是modelValue，如果你想自定义这个组件的名字
+需要写成
+  <vmodelVue v-model:qwe="childNmae"></vmodelVue>
+声明的时候也改变名字
+父亲：
+  <vmodelsVue v-model:sd="fatherName"></vmodelsVue>
+子：
+  <input
+    type="text"
+    :value="sd"
+    @input="emit('update:sd', $event.target.value)"
+  />
+defineProps(["sd"]);
+let emit = defineEmits(["update:sd"]);
+setup函数同理 值得一提的是，在setup函数中尽量使用v-model来绑定，而不要使用：value，会有奇怪的bug
+父： <vmodelVue v-model:qwe="childNmae"></vmodelVue>
+ 子： <input type="text" v-model="qwe" @input="inp" />
+import { ref } from "vue";
+export default {
+  props: ["qwe"],
+  emits: ["update:qwe"],
+  setup(props, { emit }) {
+    const qwe = ref(props.qwe);
+    function inp() {
+      emit("update:qwe", qwe.value);
+    }
+    return {
+      qwe,
+      inp,
+    };
+  },
+};
+
+
+
+
+对于v-model的传递形式用在父子 子父都可以
+用在自定义组件时
+例如
+parent
+<fuzujian v-model='name'>
+    
+ child
+首先需要声明接收
+defineProps(['modelValue'])
+const emit=defineEmits([update:modelValue])
+触发的时候需要写
+emit('update:modelValue',date)
+注意，在这种情况下，modelvalue无法改变，如果在父元素 v-model：qw  这样写，则后面的modelValue可以更替
+
+如果没有使用setup语法糖的情况下
+应该
+props:{//进行接收
+    value
+}
+setup(props,{emit}){
+    emit('update:modelValue',val) 进行通知父组件
+}
+
+```
+
+## 2：props形式
+
+```js
+切记，单项数据流所有的 props 都遵循着单向绑定原则，props 因父组件的更新而变化，自然地将新的状态向下流往子组件，而不会逆向传递。这避免了子组件意外修改父组件的状态的情况，不然应用的数据流将很容易变得混乱而难以理解。
+
+另外，每次父组件更新后，所有的子组件中的 props 都会被更新到最新值，这意味着你不应该在子组件中去更改一个 prop。若你这么做了，Vue 会在控制台上向你抛出警告
+
+父传子：
+setup语法糖的情况下
+//父亲
+  <child :obj="obj"></child>
+//子组件
+let b= defineProps(["obj"]);   父亲通过props的形式传递给了子组件数据，子组件需要使用defineProps来接收
+请注意不要结构！！
+
+注意注意，如果要使用watch来监视obj属性
+请写成
+watch(()=>b.obj,(val)=>{...})
+使用了 <script setup> 的组件是默认私有的：一个父组件无法访问到一个使用了 <script setup> 的子组件中的任何东西，除非子组件在其中通过 defineExpose 宏显式暴露
+
+子传父：
+需要父亲提前准备一个方法
+父亲：
+<child :name='a'></child>
+function a(val){
+    console.log(val)
+}
+子：
+<button @click='test'>
+let s=defineProps(['name'])  //注意，这里接收的名字应当为：name而非='a'里面的名字
+function test(){
+    s.name(val)
+}
+如果子组件想要更改父组件的数据，必须通过父组件传来的函数，通知父组件进行数据的修改，而无法直接在子组件修改父组件的数据，
+setup函数的情况下
+使用props接受传来的参数和方法，然后子组件调用父组件的方法同时将数据传过去
+ <button @click="chi">asd</button>
+export default {
+  props: ["temp", "test"],
+  setup(props, context) {
+    let s = ref("s");
+    function chi(x) {
+      props.test(s);
+      context.emit("test2", x);
+    }
+    return {
+      chi,
+    };
+  },
+};
+```
+
+## 自定义事件：
+
+```js
+\\通过给子组件添加自定义事件来实现传参 只能实现子串夫
+子传父亲：
+父亲：
+ <child @test="test1"></child>    //@test:时间名     test1 触发时调用哪个函数
+function test1(val){console.log(val)}
+子组件：
+const emit=defineEmits(["test"]);
+可以在适当的时候调用emit('test')参数作为emit的第二个参数传入
+onMounted(()=>{
+    emit('test',666)
+})
+
+setup函数写法
+在函数写法中，调用自定义事件需要使用context中的emit方法
+export default {
+  props: ["temp", "test"],
+  setup(props, context) {
+    let s = ref("s");
+    function chi(x) {
+      props.test(s);
+      context.emit("test2", "val");
+    }
+    return {
+      chi,
+    };
+  },
+};
+
+两个例子
+父组件：
+  <childrenVue :date="arr" :change="change" @addFirst="addFirst"></childrenVue>
+  <children :date="arr" :change="change" @addFirst="addFirst"></children>
+   function addFirst(val) {
+      arr.value.unshift(val);
+    }
+setup语法糖
+  <button @click="add(0)">头加一2个</button>
+let emit = defineEmits(["addFirst"]);
+function add(val) {
+  emit("addFirst", val);
+}
+setup函数
+  <button @click="add(0)">头加一个</button>
+  emits: ["addFirst"],
+   function add(val) {
+      ctx.emit("addFirst", val);
+    }
+```
+
+## mitt 任意组件的传递
+
+```js
+与vue2的 $bus一样
+消息订阅与发布：
+npm i mitt
+新建utills文件
+xx.ts
+import mitt from 'mitt'
+export const emitter=mitt()
+
+main :  import xx.ts
+基础语法
+import mitt from "mitt";
+const mitter = mitt()
+
+// 绑定事件
+mitter.on('a1', (val) => {
+    console.log('a1')
+})
+//触发事件
+mitter.emit('a1')
+//解绑
+mitter.off('a1', () => {
+    console.log('a1解绑')
+})
+export default mitter
+
+只需要在相应的组件导入使用即可
+父亲：
+import mitter from "../utills/mit";
+ <button @click="mit">点我触发mit的子串夫</button>
+mitter.on("all", (val) => {
+  console.log("all", val);   //用于绑定一个事件all，当子组件触发all时，可以实现子组件的数据传递到父组件中来
+});
+function mit(val) {
+  mitter.emit("allchild", obj);    //用于触发allchild事件，通过父组件点击触发事件，将父组件的数据传递过去
+}
+子组件：
+<button @click="act">传递给父亲</button>
+import mitter from "../utills/mit";
+mitter.on("allchild", (val) => {
+  console.log("allchild", val);    //用于绑定allchild事件，通过父组件点击触发事件，将父组件的数据传递过去
+});
+function act() {
+  fn.have(a.value);
+  emit("test", a.value);
+  mitter.emit("all", a.value);  //用来触发all事件，当子组件点击时，触发all事件，并且将数据传递给父组件
+}
+
+```
+
+## $attrs  祖孙组件通讯
+
+```js
+$attrs 其实就是props传递的另一种形式，借助子组件传递给孙子，当然也可以传递方法，让孙组件将数据传递过来
+父亲：
+ <child :aaa="aaa" :bbb="bbb" :ccc="ccc" :test='test'></child>
+function test(val){
+    console.log(val)
+}
+子组件：
+ <sun :attr="$attrs"></sun>   //子组件一个都不接受，直接传递给孙组件
+孙组件：
+let attr = defineProps(["attr"]);
+let active=defineProps(['test'])
+onMounted(() => {
+  console.log("@@@@",attr.attr);
+    active.test('val')
+});//孙组件拿到数据
+```
+
+## $parent refs     
+
+```js
+$refs 用于父传子，$parent 用于子传父
+refs类似于ref拿到子组件的实例
+父组件：
+<child1 ref='r1'>
+<child2 ref='r2'>
+<button @click='test($refs)'>
+let r1=ref()
+let r2=ref()
+
+function test($refs){
+    console.log($refs)  //拿到子组件希望父组件看到的数据
+//c1：Proxy(Object) {child1: RefImpl, , __v_skip: true}
+//c2：Proxy(Object) {child2a: RefImpl, __v_skip: true}
+}
+子组件1
+let child1 = ref("child1");
+let child1a=ref('child1a')
+defineExpose({ child1 });   //使用此方法需要子组件进行对外暴露自身的数据，采用difineExprose的方法传入对象的形式
+子组件2
+let child2a = ref("child2");
+defineExpose({ child2a });
+如果使用的setup函数，向外暴露需要使用context提供的暴露函数
+setup(props,context)
+context.expose({
+      increment
+    })
+
+$parent:
+在子组件的方法中传入$parent   ！！不允许写错  可以拿到父组件向外暴露的数据
+子组件2
+ <button @click="haveParent($parent)">拿到父组件的数据</button>
+let child2a = ref("child2");
+defineExpose({ child2a });
+function haveParent($parent) {
+  console.log($parent);  //Proxy(Object) {aaa: RefImpl, __v_skip: true}
+}
+父组件：
+let aaa=ref(123)
+defineExprose({aaa})
+
+```
+
+## provide与inject  实现爷->孙传递
+
+```js
+provide 向后代（注意，后代不仅仅是儿子和孙子，向下传递）提供数据，inject，孙子接收爷爷提供的数据
+爷爷组件：
+let sundate = ref(4);
+provide("sundate", sundate);   //provide('name',date)  
+注意，这里不可以写成sundate.value，否则会丢失响应式  //否则会是  sundate 4
+function updateSundate() {
+  sundate.value += 1;
+}
+
+孙子组件：
+let sundate = inject("sundate");   //inject('name')
+onMounted(() => {
+  console.log('sundate',sundate)  
+    //RefImpl {__v_isShallow: false, dep: undefined, __v_isRef: true, _rawValue: 4, _value: 4}
+});
+
+
+如果需要传递多个值或者方法，则需要写成对象形式
+爷爷：
+provide("sundate", { sundate, updateSundate });   //第二个参数需要传递成对象的形式，名字唯一就可以
+孙子：
+let sundate = inject("sundate");  //当然可用结构出来
+onMounted(() => {
+  console.log('sundate',sundate)   //接收的时候仍然需要保存到变量中去
+  sundate.updateSundate() 
+  console.log(sundate.sundate) 
+    //sundate {sundate: RefImpl, updateSundate: ƒ}
+//sun.vue:13 RefImpl {__v_isShallow: false, dep: undefined, __v_isRef: true, _rawValue: 5, _value: 5}
+});
+
+```
+
+
+
+
+
+
+
+## 生命周期：
+
+```vue
+创建：setup()   --->beforecreate  created
+挂在前：onBeforeMount(()=>{})
+挂载：onMounted( async()=>{ await...})
+更新：onBeforeUpdate(()=>{})    onUpdated(()=>{})
+卸载{销毁}  onBeforeUnMount(()=>{})   onUnMounted(()=>{})
+//子组件先挂在，然后父组件在挂载，深度优先遍历   app最后挂载
+
+当你修改了响应式状态时，DOM 会被自动更新。但是需要注意的是，DOM 更新不是同步的。Vue 会在“next tick”更新周期中缓冲所有状态的修改，以确保不管你进行了多少次状态修改，每个组件都只会被更新一次。
+
+要等待 DOM 更新完成后再执行额外的代码，可以使用 nextTick() 全局 API：
+```
+
+## 路由：
+
+```js
+vue3的路由区别于vue2的路由
+
+新建 router：文件夹
+路由创建与暴露
+import {createRouter,createWebHistory,createWebHashHistory} from 'vue-router'
+const router=createRouter({
+    history:createWebHistory()  //工作模式 createWebHashHistory() 哈希模式
+    routes:[
+        //路由
+        {
+            path：''
+            component:.vue
+    		name:
+        }
+    ]
+})
+export default router  //对外暴露
+
+
+main：
+//进行挂在
+createApp(App).use(router).mount('#app')
+
+active-calss只能用在routerlink标签上
+放在哪：
+<RouterView>//展示用的 
+<routerLink :to=`路径\name?a=${date}&b=${date}` active-class='激活样式'>  //标签跳转 针对link组件，里面内置了一个active-class的属性，用来方便设置激活时候的样式,动态路由传参
+<routerLink :to={path\name:'',query:{参数}} active-class='激活样式'> 
+
+params参数：
+需要在路径里面进行占位
+在路由组件中 path：'/news/:id/:text'
+这样在<routerLink :to=`/news/id=${1}/text=${2}' active-class='激活样式`>  1 2为参数
+而在对象方法中
+<routerLink :to={ name:xxx,params:{date}} active-class='激活样式`> 使用对象的写法时，只能使用name作为导航的地址
+
+
+
+接受参数
+const route=useRoute()
+从响应式对象身上结构属性会丢失响应式，记得上torefs
+ //let {query}=route  会丢失响应式，需要包裹上torefs
+ let {query}=toRefs(route)
+ //使用parmas的时候
+ let {params}=toRefs(route)
+
+
+ 
+··· 路由规则的props方法
+当使用params方法时候，
+ {
+            path：'/news/：id/：text'
+            component:.vue
+    		name:
+     		props：true   //开启props方法,之后在子组件里通过difeinprops来接收参数
+            
+            或者 props(route){
+                return { //通过这样的形式来传递query的参数
+                  route.query
+                }
+            }
+        }
+那么在后续接受参数时
+使用defineProps(['id','text'])  通过这样的形式将传递的参数形成一个单独的prop，可以直接在模板使用 
+
+
+replace：
+写在<routerLink replace>  //无法浏览器后退 
+
+    
+编程式路由导航
+import { useRouter} from 'vue-router'
+
+const router=useRouter()
+router.push('/path')  // router.replace('/path)
+router.push({
+    path:'/path',
+    query:{[参数]}
+})
+
+
+重定向:
+{
+    path:'/',
+    redirect
+}
+
+路由守卫
+beforeEach
+aftereach
+entereach
+
+```
+
+
+
+
+
+## pinia
+
+```js
+
+main:
+import {createPinia} from 'pinia'
+const pinia=createPinia()
+app.use(pinia)
+
+
+创建store文件夹
+xxx.ts：
+import {defineStore} from 'pinia'
+export const usexxxStore=defineStore('xxx',{
+    state(){
+        return{
+            a:1
+        }
+    },
+    actions:{
+        function a(){
+            this.a=this.a+1
+        }
+    }，
+      getters:{                                     
+    		big(state){
+    		return state.a*10
+}
+                                     
+                      }                                  
+                                   
+                                     
+})
+
+
+//组合式
+export const usexxxStore=defineStore('xxx',()=>{
+    let a=ref(1)
+    //方法
+    //actions：
+    function a2(){
+            this.a=this.a+1
+        },
+     //getters：
+      let b=computed(()=>{
+            return ???
+            })
+            
+    
+    return{
+        a，
+        a2,
+        b
+    }
+})
+
+
+vue中读取
+import { usexxxStore} from ''
+
+const store= usexxxStore()
+const store2=storeToRefs(store)  //保持数据！！！的响应式，store的方法不会包裹响应式
+let {a,big}=store2
+
+pinia的订阅 
+$subscribe
+直接对store仓库使用 类似于watch
+store.$subscribe((mutate,state)=>{
+    	mutate 本次修改的信息
+        state 数据
+       localStorage.setItem('val', JSON.stringify(state.shuju))
+})
+
+```
+
+
+
+
+
+## 1 toRef与toRefs
+
+```js
+toRef 与toRefs
+toRef是针对单个数据做响应式处理，而toRefs是针对全部做响应式处理，对于结构时，一定要注意响应式是否丢失
+例子：
+let obj=ref({
+    a:1,
+    b:2
+})
+let {a}=obj   //此时响应式就已经丢失了，你拿到的只是里面的一个值
+toRef：  let {a}=toRef(obj,'a')
+toRefs: let {a}=toRefs(obj)
+```
+
+## 2组合式api
+
+```js
+请注意，如果你要监视props传来的数据，请注意不要进行结构
+请写成类似这样的形式
+let prop = defineProps(['activeIndex', 'labeList'])
+	watch(() => prop.activeIndex, (val) => {
+		currentIndex.value = `item${val}`
+	})
+不要写成这样
+let {activeIndex，labeList}=defineProps(['activeIndex', 'labeList'])  //会丢失watch的响应式，但是似乎页面响应式没丢？很奇怪
+
+
+对于rective定义的属性，无法整体替换
+例如 let obj=rective（a:1,b:2）
+let obj={a:2,b:3}
+不可这样写，需要 Object，assgin（obj，{？？}）这样
+computed在vue3中变成了组合式api
+计算属性值会基于其响应式依赖被缓存。一个计算属性仅会在其响应式依赖更新时才重新计算
+计算属性正常来说是只读的，如果需要修改，需要写成get和set 的方式
+let a=computed(()=>{
+    计算属性方法具有缓存，而methods里的函数没有缓存，且只读不能改，如果需要改的话则需要写成
+    computed({
+        get()
+        set()
+    })
+    return ??  应该写成这样的形式
+})
+
+
+watch监视的是  
+1一个函数返回一个值（就是写成[()=>{return??},()=>{return}]的形式）
+2一个ref
+3一个响应式对象
+或者由以上类型组成的数组
+
+watch ,监视ref定义的基本类型和对象类型,如果需要监视对象内部的属性，需要手动开启深度监视
+注意，监视的时候不需要写value，否则则无法正常监视
+如果使用reactive定义的话，那么不可以直接对对象进行整体赋值，（如需要请使用object.assig n）可以对某个具体的属性进行修改 ，并且reactive定义的响应数据默认就是开启深度监视的，地址没有变，所以新旧值是相同的
+let op=watch(()=>{return??},(new,old)=>{
+    //watch的用法，监视的数据要注意有时需要用函数返回的形式来写
+    op() //达到条件可用关闭监视
+})
+当监视reactive定义的具体属性时 
+watch([()=>{return??},()=>{return}],(new,old)=>{
+    //当要监视多个属性时需要这样
+    //当修改的是对象属性里面的某一个值的时候，如果监视的是整个对象，那么新旧value是一样的
+    如果修改的是整个对象，那么新值是新值，旧是旧的
+})   
+watch(rective对象,(new,old)=>{
+    //当监视的是rective的对象时，需要开启deep深度监视
+}，{
+      deep:ture
+      immediate:true 进来先执行一下
+      })
+  
+watchEffect  //区别于watch，他不需要写监视谁，在里面用到的数据他默认会给你监视
+watchEffect(()=>{
+   里面用到的数据都自动进行了监视
+})
+ watch vs. watchEffect
+watch 和 watchEffect 都能响应式地执行有副作用的回调。它们之间的主要区别是追踪响应式依赖的方式：
+
+watch 只追踪明确侦听的数据源。它不会追踪任何在回调中访问到的东西。另外，仅在数据源确实改变时才会触发回调。watch 会避免在发生副作用时追踪依赖，因此，我们能更加精确地控制回调函数的触发时机。
+
+watchEffect，则会在副作用发生期间追踪依赖。它会在同步执行过程中，自动追踪所有能访问到的响应式属性。这更方便，而且代码往往更简洁，但有时其响应性依赖关系会不那么明确。
+```
+
+## 部分指令
+
+```vue
+v-if vs. v-show
+v-if 是“真实的”按条件渲染，因为它确保了在切换时，条件区块内的事件监听器和子组件都会被销毁与重建。
+
+v-if 也是惰性的：如果在初次渲染时条件值为 false，则不会做任何事。条件区块只有当条件首次变为 true 时才被渲染。
+
+相比之下，v-show 简单许多，元素无论初始条件如何，始终会被渲染，只有 CSS display 属性会被切换。
+
+总的来说，v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要频繁切换，则使用 v-show 较好；如果在运行时绑定条件很少改变，则 v-if 会更合适。
+
+v-if与v-for问题
+当 v-if 和 v-for 同时存在于一个元素上的时候，v-if 会首先被执行。请查看列表渲染指南获取更多细节。而在vue2，v-for的优先级高于v-if
+
+key的问题
+Vue 默认按照“就地更新”的策略来更新通过 v-for 渲染的元素列表。当数据项的顺序改变时，Vue 不会随之移动 DOM 元素的顺序，而是就地更新每个元素，确保它们在原本指定的索引位置上渲染。
+
+默认模式是高效的，但只适用于列表渲染输出的结果不依赖子组件状态或者临时 DOM 状态 (例如表单输入值) 的情况。
+
+为了给 Vue 一个提示，以便它可以跟踪每个节点的标识，从而重用和重新排序现有的元素，你需要为每个元素对应的块提供一个唯一的 key attribute
+```
+
+## 部分变更方法
+
+```vue
+Vue 能够侦听响应式数组的变更方法，并在它们被调用时触发相关的更新。这些变更方法包括：
+
+push()
+pop()
+shift()
+unshift()
+splice()
+sort()
+reverse()
+
+替换一个数组
+变更方法，顾名思义，就是会对调用它们的原数组进行变更。相对地，也有一些不可变 (immutable) 方法，例如 filter()，concat() 和 slice()，这些都不会更改原数组，而总是返回一个新数组。当遇到的是非变更方法时，我们需要将旧的数组替换为新的：
+
+js
+// `items` 是一个数组的 ref
+items.value = items.value.filter((item) => item.message.match(/Foo/))
+你可能认为这将导致 Vue 丢弃现有的 DOM 并重新渲染整个列表——幸运的是，情况并非如此。Vue 实现了一些巧妙的方法来最大化对 DOM 元素的重用，因此用另一个包含部分重叠对象的数组来做替换，仍会是一种非常高效的操作。
+
+v-model 还可以用于各种不同类型的输入，<textarea>、<select> 元素。它会根据所使用的元素自动使用对应的 DOM 属性和事件组合：
+
+文本类型的 <input> 和 <textarea> 元素会绑定 value property 并侦听 input 事件；
+   注意在 <textarea> 中是不支持插值表达式的。请使用 v-model 来替代： <textarea v-model="text"></textarea>
+<input type="checkbox"> 和 <input type="radio"> 会绑定 checked property 并侦听 change 事件；
+    
+<select> 会绑定 value property 并侦听 change 事件
+    <!-- `picked` 在被选择时是字符串 "a" -->
+<input type="radio" v-model="picked" value="a" />
+
+<!-- `toggle` 只会为 true 或 false -->
+<input type="checkbox" v-model="toggle" />
+
+<!-- `selected` 在第一项被选中时为字符串 "abc" -->
+<select v-model="selected">
+  <option value="abc">ABC</option>
+</select>
+```
+
+## 事件修饰符
+
+```vue
+在处理事件时调用 event.preventDefault() 或 event.stopPropagation() 是很常见的。尽管我们可以直接在方法内调用，但如果方法能更专注于数据逻辑而不用去处理 DOM 事件的细节会更好。
+
+为解决这一问题，Vue 为 v-on 提供了事件修饰符。修饰符是用 . 表示的指令后缀，包含以下这些：
+
+.stop
+.prevent
+.self
+.capture
+.once
+.passive
+template
+<!-- 单击事件将停止传递 -->
+<a @click.stop="doThis"></a>
+
+<!-- 提交事件将不再重新加载页面 -->
+<form @submit.prevent="onSubmit"></form>
+
+<!-- 修饰语可以使用链式书写 -->
+<a @click.stop.prevent="doThat"></a>
+
+<!-- 也可以只有修饰符 -->
+<form @submit.prevent></form>
+
+<!-- 仅当 event.target 是元素本身时才会触发事件处理器 -->
+<!-- 例如：事件处理器不来自子元素 -->
+<div @click.self="doThat">...</div>
+使用修饰符时需要注意调用顺序，因为相关代码是以相同的顺序生成的。因此使用 @click.prevent.self 会阻止元素及其子元素的所有点击事件的默认行为，而 @click.self.prevent 则只会阻止对元素本身的点击事件的默认行为。
+
+.capture、.once 和 .passive 修饰符与原生 addEventListener 事件相对应：
+template
+<!-- 添加事件监听器时，使用 `capture` 捕获模式 -->
+<!-- 例如：指向内部元素的事件，在被内部元素处理前，先被外部处理 -->
+<div @click.capture="doThis">...</div>
+
+<!-- 点击事件最多被触发一次 -->
+<a @click.once="doThis"></a>
+
+<!-- 滚动事件的默认行为 (scrolling) 将立即发生而非等待 `onScroll` 完成 -->
+<!-- 以防其中包含 `event.preventDefault()` -->
+<div @scroll.passive="onScroll">...</div>
+.passive 修饰符一般用于触摸事件的监听器，可以用来改善移动端设备的滚屏性能。
+
+TIP
+请勿同时使用 .passive 和 .prevent，因为 .passive 已经向浏览器表明了你不想阻止事件的默认行为。如果你这么做了，则 .prevent 会被忽略，并且浏览器会抛出警告。
+按键修饰符
+在监听键盘事件时，我们经常需要检查特定的按键。Vue 允许在 v-on 或 @ 监听按键事件时添加按键修饰符。
+
+template
+<!-- 仅在 `key` 为 `Enter` 时调用 `submit` -->
+<input @keyup.enter="submit" />
+你可以直接使用 KeyboardEvent.key 暴露的按键名称作为修饰符，但需要转为 kebab-case 形式。
+
+template
+<input @keyup.page-down="onPageDown" />
+在上面的例子中，仅会在 $event.key 为 'PageDown' 时调用事件处理。
+
+按键别名
+Vue 为一些常用的按键提供了别名：
+
+.enter
+.tab
+.delete (捕获“Delete”和“Backspace”两个按键)
+.esc
+.space
+.up
+.down
+.left
+.right
+系统按键修饰符
+你可以使用以下系统按键修饰符来触发鼠标或键盘事件监听器，只有当按键被按下时才会触发。
+
+.ctrl
+.alt
+.shift
+.meta
+注意
+
+在 Mac 键盘上，meta 是 Command 键 (⌘)。在 Windows 键盘上，meta 键是 Windows 键 (⊞)。在 Sun 微机系统键盘上，meta 是钻石键 (◆)。在某些键盘上，特别是 MIT 和 Lisp 机器的键盘及其后代版本的键盘，如 Knight 键盘，space-cadet 键盘，meta 都被标记为“META”。在 Symbolics 键盘上，meta 也被标识为“META”或“Meta”。
+
+举例来说：
+
+template
+<!-- Alt + Enter -->
+<input @keyup.alt.enter="clear" />
+
+<!-- Ctrl + 点击 -->
+<div @click.ctrl="doSomething">Do something</div>
+TIP
+
+请注意，系统按键修饰符和常规按键不同。与 keyup 事件一起使用时，该按键必须在事件发出时处于按下状态。换句话说，keyup.ctrl 只会在你仍然按住 ctrl 但松开了另一个键时被触发。若你单独松开 ctrl 键将不会触发。
+
+.exact 修饰符
+.exact 修饰符允许控制触发一个事件所需的确定组合的系统按键修饰符。
+
+template
+<!-- 当按下 Ctrl 时，即使同时按下 Alt 或 Shift 也会触发 -->
+<button @click.ctrl="onClick">A</button>
+
+<!-- 仅当按下 Ctrl 且未按任何其他键时才会触发 -->
+<button @click.ctrl.exact="onCtrlClick">A</button>
+
+<!-- 仅当没有按下任何系统按键时触发 -->
+<button @click.exact="onClick">A</button>
+鼠标按键修饰符
+.left
+.right
+.middle
+这些修饰符将处理程序限定为由特定鼠标按键触发的事件。
+
+
+
+饰符
+.lazy
+默认情况下，v-model 会在每次 input 事件后更新数据 (IME 拼字阶段的状态例外)。你可以添加 lazy 修饰符来改为在每次 change 事件后更新数据：
+
+template
+<!-- 在 "change" 事件后同步更新而不是 "input" -->
+<input v-model.lazy="msg" />
+.number
+如果你想让用户输入自动转换为数字，你可以在 v-model 后添加 .number 修饰符来管理输入：
+
+template
+<input v-model.number="age" />
+如果该值无法被 parseFloat() 处理，那么将返回原始值。
+
+number 修饰符会在输入框有 type="number" 时自动启用。
+
+.trim
+如果你想要默认自动去除用户输入内容中两端的空格，你可以在 v-model 后添加 .trim 修饰符：
+
+template
+<input v-model.trim="msg" />
+```
+
+
+
+
+
+## 3 ref属性
+
+```js
+在vue3中
+在标签上写ref属性可以拿到dom操作
+<button ref="a">
+    let a=ref()
+那么这个a就是哪个标签
+当ref写在组件上时，拿到的就是组件实例
+例如
+<BUTTON ref='btn'>
+    let btn=ref()
+此时，就拿到了这个组件的实例，当拿到组件实例的时候可以看到组件里面的数据，当使用setup的时候
+我们需要在子组件用defineExpose进行暴露出去，这样才能看到
+如果没有使用setup语法糖的时候，则不需要这么做
+
+例
+child ：
+<template><h1>这里是stu1</h1></template>
+<script lang="ts">
+export default {};
+</script>
+<script lang="ts" setup>
+import { ref } from "vue";
+let ss1 = ref("asdasd");
+defineExpose({ ss1 });
+
+parent：
+<child ref='ch'>
+<script lang="ts" setup>
+let ch=ref()
+
+
+```
+
+
+
+
+
+## 插槽：
+
+```
+默认插槽
+默认插槽需要在子组件使用双标签的形式
+parent：
+<chacao>
+    <ul>
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+    </ul>
+  </chacao>
+  <chacao>
+  <img src="https://img0.baidu.com/it/u=2565809048,1400176152&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500" alt="">
+  </chacao>
+  父组件使用了两个一样的插槽，但里面的内容是不同的，展示到页面上的效果也不同
+  
+  
+  子组件：
+   <h1>这里是插槽</h1>   而子组件只需要写上slot标签告诉父组件插槽的内容往哪里展示即可
+  <slot></slot>
+
+
+具名插槽
+当我们要向插槽里面添加的样式和结构不是单一的结构时，我们就需要使用具名插槽，来告诉具体的结构展示在具体的哪个位置
+
+parent:
+<template>
+  <chacao>
+    <template v-slot:s1>
+         //<template #s1>  具名插槽的简写形式
+      <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+      </ul>
+    </template>
+    <template v-slot:s2>
+        // <template #s2>  简写形式
+      <h1>这里是具名插槽s2</h1>
+    </template>
+  </chacao>
+  <chacao>
+    <template v-slot:s1> 
+        //<template #s1>  简写形式
+      <img
+        src="https://img0.baidu.com/it/u=2565809048,1400176152&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500"
+        alt=""
+      />
+    </template>
+  </chacao>
+</template>
+子组件：
+<template>
+  <h1>这里是插槽</h1>
+  <slot name="s1"></slot>
+  <slot name="s2"></slot>
+</template>
+// 可用看到，子组件写了两个插槽，并且命名为s1和s2
+//在父组件中，具体的结构使用了template进行包裹，并且在template上使用了v-slot:name 指令
+//注意 v-solt只能写在组件标签或者template标签上，语法为v-slot:插槽名字
+//这样，插槽就和结构一一对应起来
+
+
+作用域插槽：
+  作用域插槽用于结构由父组件决定，但是数据在子组件身上，从而形成的尴尬局面，当然具名插槽可以和作用域插槽一起使用
+  例如：  <template #s1="data">
+ 父亲：
+ <chacao>
+    <template #="{youxi}">   //这样的形式进行解构拿到data的数据
+      <ul>
+        <li v-for="(item, index) in youxi" :key="item.id">
+          {{ item.name }}
+        </li>
+      </ul>
+    </template>
+  </chacao>
+子组件
+  <h1>这里是作用域插槽</h1>
+  <slot :youxi="game"></slot>     //直接在slot标签上传递数据，可以传递多个数据，slot会将所有的数据打包成一个对象传递给父组件
+let game = reactive([
+  { id: 1, name: "benghuai" },
+  {id: 2,name: "LOL",},
+  {id: 3, name: "yuanshen" },
+  {id: 4,name: "王者",},
+]);
+效果：
+//benghuai
+//LOL
+//yuanshen
+//王者
+
+具名插槽与作用域插槽的联合使用
+子组件：
+  <slot name="sl1" :arr="game"></slot>  //将game传给组件的使用者
+let game = reactive([
+  { id: 1, name: "benghuai" },
+  {id: 2,name: "LOL",},
+  {id: 3, name: "yuanshen" },
+  {id: 4,name: "王者",},
+]);
+父组件
+ <soltss>
+    <template #sl2> <h1>asdas</h1> </template>
+    <template #sl1="{ arr }">   //作用域插槽与具名插槽的结合形式  #==v-solt: 这个指令 #sl1="{ arr }"其实就是
+    																v-solt:sl1='{arr}'
+      <h2>asdas</h2>
+      <h2 v-for="item in arr" :key="item.id">
+        {{ item.name }}
+      </h2>
+    </template>
+  </soltss>
+```
+
+# 一些题
+
+## h5+c3：
+
+### 个人博客 1776   √
+
+文字居中 text-aline：center
+
+### 水果摆盘 1767  order改变先后 √
+
+```css
+	order: 1;
+	display: flex;
+	align-self: flex-end;  //多轴的情况下设置部分
+```
+
+
+
+### 时钟转起来 2156 transform使用 √
+
+```js
+   oSecond.style.transform="rotate("+ (nowSecond * 6+ miaoDeg) + "deg)";
+```
+
+
+
+### 溢出问题 2158  溢出处理 √
+
+```css
+     display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical; //关键，垂直排列
+        overflow: hidden;
+        text-overflow: ellipsis;
+```
+
+
+
+### 图片深景 2161  针对图片设置blur模糊 √
+
+```js
+ img1.style.filter = `blur(0)`   //设置图片模糊效果
+```
+
+
+
+### 用户名片2321 居中设置 √
+
+```css
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+```
+
+
+
+### 画一只考拉 2341  grid布局 √
+
+```css
+dispaly:grid;
+ grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+ grid-template-rows: 1fr 1fr 1fr 1fr 1fr;   //设置行和列
+
+对子元素使用
+ justify-self: flex-end;  控制位置
+  align-self: flex-end;
+ grid-row: 5/6; 从第几列到第几列
+ grid-column: 1/6;
+order:排序
+```
+
+
+
+### 西天取经  2419  动画问题 √
+
+```css
+ animation: a4 0.8s steps(8) infinite linear;
+```
+
+
+
+### 新鲜的蔬菜 2439 grid布局√
+
+```
+css
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+    grid-area: 3/3/4/4;
+
+```
+
+
+
+### 水果消消乐  隐藏问题 none会改变原始结构 √
+
+```js
+// TODO：请补充代码
+function startGame() {
+    let container = document.querySelector('.container')
+    let img = container.querySelectorAll('img')
+    let btn = document.querySelector('.btn')
+    let arr = []  //用数组存储已经显示出来的图片，判断数组里两个图片dom的alt是否相同
+    let code = document.querySelector('#score')
+    img.forEach(e => e.style.display = 'block')
+    btn.style.display = 'none'
+    setTimeout(() => {
+        img.forEach(e => e.style.display = 'none')
+    }, 1000)
+
+    for (let i = 0; i < img.length; i++) {
+        img[i].parentNode.onclick = function () {
+            img[i].style.display = 'block'
+            arr.push(img[i])
+            if (arr.length == 2) {
+                if (arr[0].alt == arr[1].alt) {
+                    setTimeout(() => {
+                        arr[0].parentNode.style.opacity = 0
+                        arr[1].parentNode.style.opacity = 0  //给父节点设置opacity，不会改变结构，none会改变原始结构，去看一下三种隐藏方式
+                        code.innerText = +code.innerText + 2
+                        arr = []
+                    })
+                } else {
+                    setTimeout(() => {
+                        arr[0].style.display = 'none'
+                        arr[1].style.display = 'none'
+                        arr = []
+                        code.innerText -= 2
+                    }, 500)
+                }
+            } else {
+                return
+            }
+        }
+    }
+
+}
+
+```
+
+
+
+## 展开扇子 2449  tarnsfrom √
+
+```css
+#box:hover div:nth-child(11){
+  transform: rotate(50deg);
+}
+#box:hover div:nth-child(12){
+  transform: rotate(60deg);
+}
+```
+
+
+
+## 电影院排座 5133 √
+
+```
+.seat-area {
+  display: flex;
+  flex-wrap: wrap;
+  //注意，给每个seat都加了10的margin top 所以这个位置要少10px
+  margin-top: 40px;
+}
+
+.seat {
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.seat:nth-child(8n) {
+  margin-right: 0px;
+}
+
+.seat:nth-child(8n+1) {
+  margin-left: 0px;
+}
+
+.seat:nth-child(8n+2) {
+  margin-right: 30px;
+}
+
+.seat:nth-child(8n+6) {
+  margin-right: 30px;
+}
+```
+
+
+
+## 自适应页面 流媒体布局 √
+
+```css
+@media (max-width: 800px) {  //流媒体布局
+  .collapse {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background: #252525;
+  }
+  label.menu-btn{
+    display: block;
+    padding: 16px 32px;
+  }
+  #menu-btn:checked ~.collapse{
+    display: block;
+  }
+  .menu li{
+    display: block;
+  }
+  .dropdown ul{
+    position: static;
+  }
+  #tutorials .row{
+    display: block;
+  }
+  #tutorials img{
+    padding: 0;
+  }}
+}
+```
+
+
+
+## vue
+
+## 成语学习2279 √
+
+```js
+    //TODO 点击文字后，在idiom从左到右第一个空的位置加上改文字
+要注意是的，在vue2中，因为Object.definepropity针对的是对象里面的某一个具体属性设置的get和set方法，所以，整体替换里面的值，vue的响应式是无法做出反应的，实际上能够使用的只有
+splice(),
+push(), pop(),
+shift(), unshift(),
+sort(), reverse()对数组的数据进行操作，而无法直接使用arr[i]=123这样的操作，如果相对某个属性进行修改需要使用set方法，this.set(arr,哪个值要被修改，新的值)
+
+
+        getSingleWord(val) {
+          for (let i = 0; i < this.idiom.length; i++) {
+            if (this.idiom[i] == '') {
+              this.$set(this.idiom, i, val)
+              break
+            }
+          }
+        },
+           confirm() {
+          if (this.idiom.length == 4) {
+            let result = this.idiom.join('')
+            let daan = this.arr.forEach((e) => {
+              if (e.tip == this.tip) {
+                return e.word
+              }
+            })
+            result == daan ? this.result = true : this.result = false
+          }
+        }
+```
+
+
+
+## 消失的token  vuex开启命名空间 √
+
+```js
+ var app = new Vue({
+            el: '#app',
+            data() { },
+            computed: {
+                welcome() {
+                    return store.getters.welcome
+                },
+                username() {
+                    return store.getters['user/username']
+                },
+                token() {
+                    return store.getters['user/token']
+                }
+            },
+            methods: {
+                // 回车/点击确认的回调事件
+                login(username) {
+                    username && store.commit(['user/login'], { username, token: 'sxgWKnLADfS8hUxbiMWyb' })
+                    username && store.commit('say', '登录成功，欢迎你回来！')
+                }
+            }
+```
+
+
+
+## 一起会议 2444 难 √
+
+```js
+https://www.lanqiao.cn/questions/609112/
+```
+
+
+
+## 阅读吧 2464 √
+
+```html
+ <div class="right" ref="a" id="setBG">
+              <a @click="back('#f6edd4',$event)" style="background-color: #f6edd4" class="iconfont icon-selected"></a>
+              <a @click="back('#ebf4ea',$event)" style="background-color: #ebf4ea"></a>
+              <a @click="back('#e9f2f5',$event)" style="background-color: #e9f2f5"></a>
+              <a @click="back('#f6e8e4',$event)" style="background-color: #f6e8e4"></a>
+              <a @click="back('#000000',$event)" style="background-color: #000000"></a>
+            </div>
+          </li>
+          <li class="container">
+            <div class="left">字体大小</div>
+            <!-- 设置字体大小的按钮 -->
+            <div class="set-font">
+              <a class="prev" @click="changeFont(-2)">A-</a><b></b> <span class="lang">{{size}}</span><b></b>
+              <a class="next" @click="changeFont(2)">A+</a>
+            </div>
+          </li>
+          <li class="container">
+            <!-- 关闭 x 图标 -->
+            <a @click="show(false)" class="iconfont icon-close"></a>
+          </li>
+        </ul>
+
+  new Vue({
+      // 注意：请勿修改 data 选项中已提供的数据！！！
+      el: "#app",
+      data: {
+        bgList: ["#f6edd4", "#ebf4ea", "#e9f2f5", "#F6E8E4", "#000000"], // 阅读主题色列表（与设置主题的圆形色块一一对应）
+        isShow: true,
+        size: 18
+      },
+      methods: {
+        show(val) {
+          this.isShow = val
+        },
+        back(col, e) {
+          this.$refs.text.style.backgroundColor = col
+          col == '#000000' ? this.$refs.text.style.color = '#ffffff' : this.$refs.text.style.color = '#333333'
+          Array.from(this.$refs.a.children).forEach((e) => { e.className = '' })
+          e.target.className = 'iconfont icon-selected'
+        },
+        changeFont(val) {
+          this.size += val
+          if (this.size < 12) {
+            this.size = 12
+          }
+          if (this.size > 48) {
+            this.size = 48
+          }
+          this.$refs.text.style.fontSize = this.size + 'px'
+          this.$refs.text.style.lineHight = (this.size + 10) + 'px'
+        }
+      }
+    });
+```
+
+
+
+## 绝美宋词 2327 模糊搜寻√
+
+```js
+注意v-html指令的使用，替换过后的字符串变成了带有标签样式的，如果直接插值语法则无法写，使用v-html可以有效的展示
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>绝美宋词</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="./js/vue.min.js"></script>
+  <script src="./js/axios.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1 style="text-align: center">输入关键字，找一首词</h1>
+    <!-- TODO：待补充代码 -->
+    <div class="search-form">
+      <input type="text" @input="toFind" v-model="finds" id="search" class="search" placeholder="词牌名 词句 词人" />
+      <ul class="suggestions">
+        <li v-for="(item,index) in zhanshi" :key='item.title'>
+          <span class="poet" v-html="item.poetry_content"></span>
+          <span class="title">
+            <span v-html="item.title">词牌名</span>
+            -
+            <span v-html="item.author">词人</span>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <script>
+    let vm = new Vue({
+      el: '#app',
+      // TODO：待补充代码
+      data() {
+        return {
+          show: [],
+          show2: [],
+          finds: '',
+          zhanshi: []
+        }
+      },
+      mounted() {
+        axios.get('./data.json').then((e) => {
+          this.show = e.data
+          this.show2 = this.show.slice()
+        })
+      },
+      methods: {
+        toFind() {
+          this.zhanshi = []
+          if (this.finds == ''||this.finds == ' ') {
+            this.zhanshi = []
+            return
+          }
+          this.show.forEach(e => {
+            if (e.author.includes(this.finds) || e.poetry_content.includes(this.finds) || e.title.includes(this.finds)) {
+              let item = {
+                author: e.author.replaceAll(this.finds, `<span class="highlight">${this.finds}</span>`),
+                poetry_content: e.poetry_content.replaceAll(this.finds, `<span class="highlight">${this.finds}</span>`),
+                title: e.title.replaceAll(this.finds, `<span class="highlight">${this.finds}</span>`)
+              }
+              this.zhanshi.push(item)
+            }
+          });
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
+```
+
+
+
+## isbn转换 难 √
+
+```js
+function getNumbers(str) {
+  // TODO: 待补充代码
+  return str.replace(/[^\dX]/g, '')
+}
+
+// 验证当前 ISBN10 字符串是否有效
+// 入参 str 为待判断的只有纯数字和大写 X 字母的字符串
+function validISBN10(str) {
+  // TODO: 待补充代码
+  if (str.length != 10) {
+    return false
+  }
+  let end = str.slice(str.length - 1)
+  let sum = 0
+  str = str.slice(0, str.length - 1)
+  for (let i = 1; i <= str.length; i++) {
+    sum = sum + i * (parseInt(str[i - 1]))
+  }
+  sum % 11 == 10 ? sum = "X" : sum = sum % 11
+  if (sum == end) {
+    return true
+  } else {
+    return false
+  }
+}
+
+// 将用户输入的 ISBN-10 字符串转化为 ISBN-13 字符串
+// 入参 isbn 为有效的 ISBN-10 字符串
+function ISBN10To13(isbn) {
+  // TODO: 待补充代码
+  let neIsbn = '978' + isbn.slice(0, isbn.length - 1)
+  let end = ''
+  let sum = 0
+  for (let index = 1; index <= neIsbn.length; index++) {
+    if (index % 2 == 0) {
+      sum = sum + 3 * parseInt(neIsbn[index - 1])
+    } else {
+      sum = sum + 1 * parseInt(neIsbn[index - 1])
+    }
+  }
+  end = 10 - sum % 10
+  return neIsbn + end.toString()
+}
+
+```
+
+
+
+## js
+
+## 防抖2287 √
+
+```js
+function debounce(fn, delay = 0) {
+  // TODO: 在这里写入具体的实现逻辑
+  // 返回一个新的防抖函数
+  // 即使函数在 delay 时间段内多次被调用，也只会在最后一次函数被调用的 delay 时间结束后执行
+  let timer
+  return function (...args) {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+    }, delay)
+  }
+}
+```
+
+
+
+## 分阵营2290 √
+
+```js
+function orderStudentGrade(students) {
+  // TODO: 在这里写入具体的实现逻辑
+  // 将学生的成绩按班级分组，同一班级中按照总分从高到底排序
+  let result = {}
+  for (let i = 0; i < students.length; i++) {
+    let cl = students[i].class
+    result[cl] ? result[cl].push(students[i]) : result[cl] = [students[i]]
+  }
+  for (const key in result) {
+    result[key].sort((a, b) => {
+      let anum = a.math + a.language + a.english + a.physics + a.chemistry
+      let bnum = b.math + b.language + b.english + b.physics + b.chemistry
+      return bnum - anum
+    })
+  }
+  return result
+}
+```
+
+
+
+## 芝麻开门2322 promise问题 √
+
+```js
+const div = document.createElement("div");
+  const body = document.querySelector('body')
+  // TODO：待补充代码
+  return new Promise((reslove, reject) => {
+    div.innerHTML = template
+    body.appendChild(div)
+    let sure = document.querySelector('#confirm')
+    let notSure = document.querySelector('#cancel')
+    sure.onclick = function () {
+      let val = document.querySelector('input').value
+      if (val == incantations) {
+        reslove(val)
+      } else {
+        reject(false)
+      }
+      body.removeChild(div)
+    }
+    notSure.onclick = function () {
+      body.removeChild(div)
+    }
+  })
+```
+
+
+
+## 宝贵的一票 2323  难 √
+
+```js
+可以去了解一下insertAdjacentHTM，可以不需要创建dom元素，直接按照html解析模板字符串加入到某个位置
+element.insertAdjacentHTML(position, text);
+'beforebegin'：元素自身的前面。
+'afterbegin'：插入元素内部的第一个子节点之前。
+'beforeend'：插入元素内部的最后一个子节点之后。
+'afterend'：元素自身的后面。
+还有要注意querySelector里面可以写css获取节点的方法，例如.list>.row:last-child list下面的row里面的最后一个元素
+还要注意parentNode与childNodes获取对应的父子节点
+
+let initRender = (txt) => {
+      return `<div class="mb-3 row">
+                <label class="col-sm-2 col-form-label txt">${txt}</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control">
+               </div>
+            </div>`;
+    };
+    let shan = ` <div class="col-sm-1">
+    <img class="del-icon" src="./images/x.svg" alt="" />
+  </div>`
+    $(
+      (function () {
+        // 初始化的时候渲染两条数据，且不带删除符号
+        for (let index = 0; index < 2; index++) {
+          let initList = initRender(`选项${index + 1}`);
+          $(".list").append(initList);
+        }
+        // 点击加号逻辑
+        $(".add").click(function () {
+          // TODO 待补充代码
+          const len = $('.row .txt').length
+          if (len == 2) {
+            let row = document.querySelectorAll('.list>.row')
+            for (let i = 0; i < row.length; i++) {
+              row[i].insertAdjacentHTML('beforeend', shan)
+            }
+          }
+          let list = document.querySelector('.list')
+          list.insertAdjacentHTML('beforeend', initRender(`选项${len + 1}`))
+          let lest = document.querySelector('.list>.row:last-child')
+          lest.insertAdjacentHTML('beforeend', shan)
+        });
+        // 点击 x 删除逻辑，列表小于 2 项时不显示删除图标
+        $(document).on("click", ".del-icon", function (e) {
+          // TODO 待补充代码
+          let list = document.querySelector('.list')
+          const len = $('.row .txt').length
+          list.removeChild(e.target.parentNode.parentElement)
+          for (let i = 0; i < len - 1; i++) {
+              list.childNodes[i].childNodes[1].innerHTML = `选项${i + 1}`
+            }
+          if (len <= 3) {  
+            let sh = document.querySelectorAll('.list .row .col-sm-1')
+            for (let i = 0; i < len - 1; i++) {
+              list.childNodes[i].removeChild(sh[i])
+            }
+          }
+        });
+      })()
+    );
+```
+
+
+
+## 资讯接口 nodeserver √
+
+```js
+const http = require('http')
+const server = http.createServer((req, res) => {
+    if (req.url == '/news' && req.method == 'GET') {
+        res.setHeader("Content-type", "text/html;charset=utf8");
+        res.end(JSON.stringify([
+            {
+                "channelId": "5572a108b3cdc86cf39001cd",
+                "name": "国内焦点"
+            },
+            {
+                "channelId": "5572a108b3cdc86cf39001ce",
+                "name": "国际焦点"
+            }
+        ]))
+    } else {
+        res.end('404')
+    }
+})
+
+server.listen(8080, () => {
+    console.log('启动');
+})
+```
+
+
+
+## 平地起高楼 2328 树形结构 √
+
+```js
+function convertToTree(regions, rootId = "0") {
+  // TODO: 在这里写入具体的实现逻辑
+  // 将平铺的结构转化为树状结构，并将 rootId 下的所有子节点数组返回
+  // 如果不存在 rootId 下的子节点，则返回一个空数组
+  let result = []   
+  regions.forEach(e => {
+    if (e.pid == rootId) {
+      result.push(e)
+      e.children = convertToTree(regions, e.id)   //递归转化成树形结构
+    }
+  });
+  return result
+}
+```
+
+
+
+## 偷梁换柱 2332 proxy与object.defineproto √
+
+```js
+vue2写法
+let person = {
+  age: 0,
+};
+// TODO:在这里写入具体的实现逻辑
+// 对 person 的 age 属性更新行为进行拦截
+// 如果输入的年龄在 0 - 150 之间，则认为是合法
+// 否则，如果小于 0，则返回 0；如果大于 150，则返回 150
+for (const key in person) {
+  let k = person[key]
+  Object.defineProperty(person, key, {
+    get() {
+      return k
+    },
+    set(val) {
+      if (k !== val) {
+        if (val < 0) {
+          k = 0
+        } else if (val > 150) {
+          k = 150
+        } else {
+          k = val
+        }
+      }
+    }
+  })
+}
+
+vue3写法
+person = new Proxy(person, {
+  get(target, k) {
+    return target[k]
+  },
+  set(target, k, val) {
+    if (target[k] !== val) {
+      if (val < 0) {
+        target[k] = 0
+      } else if (val > 150) {
+        target[k] = 150
+      } else {
+        target[k] = val
+      }
+    }
+  }
+})
+```
+
+
+
+
+
+## 不能说的秘密  随机数 难√
+
+```js
+//虽然看起来很屎，但是应该是最简单的了
+function generatePassword(lower, upper, number, symbol, length) {
+  //TODO：待补充代码
+  let result = ''
+  let ar = []
+  function moth(list) {
+      //定义一个函数，从传入的数组中随机抽取一个加入到result中
+    result += list[(Math.floor(Math.random() * list.length))]
+  }
+  if (lower) {
+    let ar1 = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+    //如果选择了小写，则将全部的字母加入到ar中
+    ar.push(...ar1)
+    moth(ar1)//自己调用一次moth，从而保证里面至少有一个小写字母，下面也都同理
+  }
+  if (upper) {
+    let ar1 = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+    ar.push(...ar1)
+    moth(ar1)
+  }
+  if (number) {
+    let ar1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    ar.push(...ar1)
+    moth(ar1)
+  }
+  if (symbol) {
+    let ar1 = Array.from('!@#$%^&*(){}[]=<>/,.')
+    ar.push(...ar1)
+    moth(ar1)
+  }
+  while (result.length < length) {
+      //此时点击要包含的类型均已经加上，而ar里面存放着都是指定类型的全部可能性
+      //此时只需要将数据补齐长度即可
+      //因为前面的每次调用保证了里面至少有一个对应的类型
+    moth(ar)
+  }
+  return result
+}
+
+```
+
+
+
+## 用什么来做计算 2441 eval √
+
+```js
+let btn = document.querySelectorAll('.calc-button')
+let result = document.querySelector('#result')
+let formula = document.querySelector('#formula')
+let isre = false
+let show = ''
+for (let i = 0; i < btn.length; i++) {
+    btn[i].onclick = function () {
+        if (btn[i].innerHTML === 'AC') {
+            result.value = ''
+            formula.value = ''
+            show = ''
+        }
+        else if (btn[i].innerHTML === '=') {
+            if (result.value === "NaN") {
+                return
+            }
+            show = show.replaceAll('x', '*')
+            show = show.replaceAll('÷', '/')
+            result.value = eval(show)
+            isre = true
+        }
+        else if (btn[i].innerHTML === '√') {
+            if (eval(show) < 0) {
+                result.value = 'NaN'
+            } else {
+                result.value = Math.sqrt(eval(show))
+            }
+        }
+        else {
+            if (isre) {
+                result.value = ''
+                formula.value = ''
+                show = ''
+                isre = false
+            }
+            show += this.innerHTML
+            formula.value = show
+        }
+
+    }
+}
+```
+
+
+
+## 权限管理 2443 难√
+
+```js
+v1
+
+ $("#add").click(function () {
+    // TODO：补充代码，实现功能
+    let options = document.querySelector('#leftSelect')
+    let selected = options.querySelectorAll('option:checked')
+    let right = document.querySelector('#rightSelect')
+    selected.forEach((e) => {
+      right.appendChild(e)
+      changeauth(e, '管理员')
+    })
+  });
+  $("#addAll").click(function () {
+    let options = document.querySelector('#leftSelect')
+    let selected = options.querySelectorAll('option')
+    // TODO：补充代码，实现功能
+    let right = document.querySelector('#rightSelect')
+    selected.forEach((e) => {
+      right.appendChild(e)
+      changeauth(e, '管理员')
+    })
+  });
+  $("#remove").click(function () {
+    // TODO：补充代码，实现功能
+    let options = document.querySelector('#leftSelect')
+    let right = document.querySelector('#rightSelect')
+    let selected = right.querySelectorAll('option:checked')
+    selected.forEach((e) => {
+      options.appendChild(e)
+      changeauth(e, '普通用户')
+    })
+  });
+  $("#removeAll").click(function () {
+    // TODO：补充代码，实现功能
+    let options = document.querySelector('#leftSelect')
+    // TODO：补充代码，实现功能
+    let right = document.querySelector('#rightSelect')
+    let selected = right.querySelectorAll('option')
+    selected.forEach((e) => {
+      options.appendChild(e)
+      changeauth(e, '普通用户')
+    })
+  });
+});
+function changeauth(e, val) {
+  console.log(e);
+  let chan = document.querySelectorAll('tr')
+  for (let i = 0; i < chan.length; i++) {
+    if (chan[i].children[0].innerHTML == e.innerHTML) {
+      chan[i].children[1].innerHTML = val
+    }
+  }
+
+}
+/**
+ * 修改权限
+ * @param {Object} right 要修改的权限
+ * @param {Object} changeList 要修改权限的用户列表
+ */
+function changeAccess(right, changeList) {
+  // TODO：补充代码，实现功能
+}
+// 异步获取数据
+async function getData() {
+  // TODO：补充代码，实现功能
+  let data = []
+  await fetch('./js/userList.json', {
+    method: 'GET'
+  }).then((e) => e.json()).then((s) => {
+    data = s
+  })
+  let list = document.querySelector("#userList")
+  data.forEach((e) => {
+    let tr = document.createElement('tr')
+    let td1 = document.createElement('td')
+    let td2 = document.createElement('td')
+    td1.innerHTML = e.name
+    td2.innerHTML = '普通用户'
+    tr.appendChild(td1)
+    tr.appendChild(td2)
+    list.appendChild(tr)
+  })
+}
+
+
+
+v2 抽离了部分公告代码形成了两个函数
+$(function () {
+  // 使用 ajax 获取 userList.json 数据并渲染到页面
+  getData();
+
+  // 为按钮添加事件
+  $("#add").click(function () {
+    // TODO：补充代码，实现功能
+    let options = document.querySelector('#leftSelect')
+    let right = document.querySelector('#rightSelect')
+    remove(options, right, '管理员')
+  });
+  $("#addAll").click(function () {
+    let options = document.querySelector('#leftSelect')
+    // TODO：补充代码，实现功能
+    let right = document.querySelector('#rightSelect')
+    removes(options, right, '管理员')
+  });
+  $("#remove").click(function () {
+    // TODO：补充代码，实现功能
+    let options = document.querySelector('#leftSelect')
+    let right = document.querySelector('#rightSelect')
+    remove(right, options, '普通用户')
+  });
+  $("#removeAll").click(function () {
+    // TODO：补充代码，实现功能
+    let options = document.querySelector('#leftSelect')
+    // TODO：补充代码，实现功能
+    let right = document.querySelector('#rightSelect')
+    removes(right, options, '普通用户')
+  });
+});
+
+function remove(target, to, val) {
+  let tar = target.querySelectorAll('option:checked')
+  tar.forEach((e) => {
+    to.appendChild(e)
+    changeauth(e, val)
+  })
+}
+function removes(target, to, val) {
+  let tar = target.querySelectorAll('option')
+  console.log(tar);
+  tar.forEach((e) => {
+    to.appendChild(e)
+    changeauth(e, val)
+  })
+}
+
+
+function changeauth(e, val) {
+  console.log(e);
+  let chan = document.querySelectorAll('tr')
+  for (let i = 0; i < chan.length; i++) {
+    if (chan[i].children[0].innerHTML == e.innerHTML) {
+      chan[i].children[1].innerHTML = val
+    }
+  }
+
+}
+/**
+ * 修改权限
+ * @param {Object} right 要修改的权限
+ * @param {Object} changeList 要修改权限的用户列表
+ */
+// 异步获取数据
+async function getData() {
+  // TODO：补充代码，实现功能
+  let data = []
+  await fetch('./js/userList.json', {
+    method: 'GET'
+  }).then((e) => e.json()).then((s) => {
+    data = s
+  })
+  let list = document.querySelector("#userList")
+  data.forEach((e) => {
+    let tr = document.createElement('tr')
+    let td1 = document.createElement('td')
+    let td2 = document.createElement('td')
+    td1.innerHTML = e.name
+    td2.innerHTML = '普通用户'
+    tr.appendChild(td1)
+    tr.appendChild(td2)
+    list.appendChild(tr)
+  })
+}
+
+```
+
+
+
+## 商城管理系统 2447 树形结构√
+
+```js
+function tree(list, id = '-1') {
+  let result = []
+  list.forEach(e => {
+    if (e.parentId == id) {
+      result.push(e)
+      e.children = tree(list, e.id)
+    }
+  });
+  return result
+}
+
+function auth(list) {
+  let arr = []
+  list.forEach((e) => {
+    arr.push(e.auth)
+  })
+  return arr
+}
+
+
+
+const getMenuListAndAuth = (menuList) => {
+  let menus = tree(menuList)
+  let auths = auth(menuList)
+  // TODO：待补充代码
+  return { menus, auths }; // menus 转化后的树形结构数据，auths 转化后的权限列表数组
+};
+```
+
+
+
+## 东奥大抽奖 2452  使用 for循环获取dom √
+
+```js
+let rollTime; // 定义定时器变量用来清除定时器
+let time = 0; // 转动次数
+let speed = 300; // 转动时间间隔
+let times; // 总转动次数
+
+// 开始按钮点击事件后开始抽奖
+$("#start").on("click", function () {
+  $("#award").text(""); //清空中奖信息
+  times = parseInt(Math.random() * (20 - 30 + 1) + 20, 10); // 定义总转动次数，随机20-30次
+  rolling();
+});
+let item = []
+for (let i = 1; i < 9; i++) {
+  item.push(document.querySelector(`.li${i}`))
+}
+let i = 0
+// TODO：请完善此函数
+function rolling() {
+  time++; // 转动次数加1
+  if(time==1){
+    item[0].classList.add('active')
+  }
+  clearTimeout(rollTime);
+  rollTime = setTimeout(() => {  
+    item[i].classList.remove('active')
+    i++
+    if (i % 8 === 0) {
+      i = 0
+      item[0].classList.add('active')
+      item[7].classList.remove('active')
+    }
+    item[i].classList.add('active')
+    window.requestAnimationFrame(rolling); // 进行递归动画
+  }, speed);
+
+  // time > times 转动停止
+  if (time > times) {
+    clearInterval(rollTime);
+    time = 0;
+    let show = document.querySelector('#award')
+    show.innerHTML = item[i].innerHTML
+    return;
+  }
+}
+
+```
+
+
+
+## 寻找狼人 filter手写 注意第一个this此时指向数组本身 √
+
+```js
+Array.prototype.myarray = function (cb) {
+  // TODO：待补充代码
+  let ar = this
+  let result = []
+  console.log(ar, cb);
+  for (let i = 0; i < ar.length; i++) {
+    if (cb(ar[i])) {
+      result.push(ar[i])
+    }
+  }
+  return result
+};
+```
+
+
+
+## 课程列表 2457  分页问题√还可以优化
+
+```js
+let pageNum = 1; // 当前页码，默认页码1
+let maxPage; // 最大页数
+
+// TODO：待补充代码
+async function getdate() {
+  await axios.get('./js/carlist.json').then((e) => {
+    let data = e.data
+    let one = []
+    let two = []
+    let there = []
+    let four = []
+    for (let i = 0; i < data.length; i++) {
+      if (i < 5) {
+        one.push(data[i])
+      } else if (i >= 5 && i < 10) {
+        two.push(data[i])
+      } else if (i >= 10 && i < 15) {
+        there.push(data[i])
+      } else {
+        four.push(data[i])
+      }
+    }
+    if (pageNum == 1) {
+      change(one)
+    }
+    if (pageNum == 2) {
+      change(two)
+    }
+    if (pageNum == 3) {
+      change(there)
+    }
+    if (pageNum == 4) {
+      change(four)
+    }
+  });
+}
+getdate()
+// 点击上一页
+let prev = document.getElementById("prev");
+prev.onclick = function () {
+  // TODO：待补充代码
+  pageNum--
+  getdate()
+  if (pageNum == 1) {
+    prev.classList.add('disabled')
+    next.classList.remove('disabled')
+  }
+};
+// 点击下一页
+let next = document.getElementById("next");
+next.onclick = function () {
+  // TODO：待补充代码
+  pageNum++
+  getdate()
+  if (pageNum == 4) {
+    next.classList.add('disabled')
+    prev.classList.remove('disabled')
+  }
+};
+
+function change(arr) {
+  let lists = document.querySelector('.list-group')
+  lists.innerHTML = ''
+  for (let i = 0; i < arr.length; i++) {
+    console.log(arr[i]);
+    let div = document.createElement('div')
+    div.innerHTML = ` <div class="list-group">
+      <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">${arr[i].name}</h5>
+          <small>${(arr[i].price)}.00元</small>
+        </div>
+        <p class="mb-1">
+          ${arr[i].description}
+        </p>
+      </a>
+    </div>`
+    lists.appendChild(div)
+  }
+}
+
+```
+
+
+
+## 新增地址2465 insertBefore √
+
+![71152145029](C:\Users\22216\Desktop\assets\1711521450292.png)
+
+```js
+// 初始化省份下拉列表内容
+//相对于啊appendchild  insertBefore可以加入到子节点的首位
+ //saves.insertBefore(li,saves .firstChild)
+	父节点在前面插入（新节点，父节点的第一个节点）这样就可以始终保持在父节点的第一个节点插入新节点了’
+function provinceInit() {
+  var province = document.getElementById("param_province");
+  province.length = provinces.length;
+  for (var i = 0; i < provinces.length; i++) {
+    province.options[i].text = provinces[i];
+    province.options[i].value = provinces[i];
+  }
+}
+
+// 选择省份后对应城市下拉列表内容渲染
+function provincechange() {
+  // TODO：请补充代码实现功能
+  var province = document.getElementById("param_province");
+  let selt = province.querySelector('option:checked')
+  let data = citys[selt.index]
+  var province = document.getElementById("param_city");
+  province.length = data.length;
+  for (var i = 0; i < data.length; i++) {
+    province.options[i].text = data[i];
+    province.options[i].value = data[i];
+  }
+}
+
+/**
+ * 为标签绑定单击事件。
+ * 事件效果为：
+ * 1、鼠标点击该标签后该标签样式显示 class=active；
+ * 2、其他已选标签的 active 样式被移除；
+ * 3、将选中的标签对应下标（即选择器为 “mark a” 选中的标签对应的下标）更新到 id=param_mark 的隐藏的 input 中。
+ */
+function addClick() {
+  // TODO：请补充代码实现功能
+
+  let tit = document.querySelector('.mark')
+  let a = Array.from(document.querySelectorAll('a'))
+  let ind = 0
+  tit.addEventListener('click', function (e) {
+    let clickIndex = a.indexOf(e.target)
+    if (ind !== clickIndex) {
+      a[ind].classList.remove('active')
+      a[clickIndex].classList.add('active')
+    }
+    ind = clickIndex
+  })
+
+}
+// 提交信息后，读取并显示在页面中
+function saveInfo() {
+  // TODO：请补充代码实现功能
+  var province = document.getElementById("param_province");
+  let selt = province.querySelector('option:checked') //省份
+  var province2 = document.getElementById("param_city");
+  let shi = province2.querySelector('option:checked') //市区
+  let err = document.querySelector('.warning-dialog')
+  let inp = document.querySelectorAll('input')
+  let biaoqin = document.querySelector('.active')
+  let saves = document.querySelector('.address-list')
+  let title = document.querySelector("#main_title")
+  let inps = Array.from(inp)
+  let s = inps.every((e) => {
+    return e.value !== ''
+  })
+  if (selt.index != '0' && s) {
+    let add = document.querySelector(".address")
+    let use = document.querySelector('.user-info')
+    title.innerHTML = '地址管理'
+    add.style.display = 'none'
+    use.style.display = 'none'
+    saves.style.display = 'block'
+    let cal = ''
+    if (biaoqin.innerHTML == '家') {
+      cal = 'home'
+    }
+    if (biaoqin.innerHTML == '学校') {
+      cal = 'school'
+    }
+    if (biaoqin.innerHTML == '公司') {
+      cal = 'company'
+    }
+    console.log(selt.innerHTML, shi.innerHTML, inp[0], biaoqin.innerHTML, inp[2].value, inp[3].value);
+    let temp = `
+    <li>
+    <div class="show-area">
+      <label class="${cal}">${biaoqin.innerHTML}</label>
+      <span>${selt.innerHTML + shi.innerHTML}</span>
+    </div>
+    <div class="show-address">
+      <span>${inp[0].value}</span>
+      <a><img src="./images/edit.png" /></a>
+    </div>
+    <div class="show-info">
+      <span>${inp[2].value}</span>
+      <span>${inp[3].value}</span>
+    </div>
+  </li>`
+    let li = document.createElement('li')
+    li.innerHTML = temp
+    saves.insertBefore(li,saves .firstChild)
+  } else {
+    err.style.display = 'block'
+  }
+}
+
+// 切换新增地址和地址管理的显隐
+function back() {
+  if (document.getElementById("main_title").innerHTML == "地址管理") {
+    document.getElementById("main_title").innerHTML = "新增地址";
+    document.querySelector(".address-list").style.display = "none";
+    document.querySelector(".address").style.display = "block";
+    document.querySelector(".user-info").style.display = "block";
+  }
+}
+// 页面加载后的初始化操作
+function init() {
+  // 初始化省份下拉列表内容
+  provinceInit();
+  // 为标签绑定单击事件
+  addClick();
+}
+
+window.onload = function () {
+  // 初始化
+  init();
+};
+
+```
+
+
+
+## 年度明星项目 难 √
+
+```js
+/ 保存翻译文件数据的变量
+let translation = {};
+// 记录当前语言
+let currLang = "zh-cn";
+let arr = []  //
+let arr2 = []  //备份一份数据
+let btn = document.querySelector('.load-more')
+// TODO: 请在此补充代码实现项目数据文件和翻译数据文件的请求功能
+$.get('./js/all-data.json').then((e) => {
+  arr = e
+  arr2 = arr.slice() //浅拷贝
+  add()
+})
+$.get('./js/translation.json').then((e) => {
+  translation = e
+})
+function add() {
+  let item = {}
+  for (let i = 0; i < 15; i++) {
+    item.icon = arr[i].icon
+    item.name = arr[i].name
+    currLang == 'zh-cn' ? item.description = arr[i].descriptionCN : item.description = arr[i].descriptionEN
+    item.stars = arr[i].stars
+    item.tags = arr[i].tags
+    $(".list > ul").append(createProjectItem(item));
+  }
+  for (let i = 0; i < 15; i++) {
+    arr.shift()  //每添加15个就删除前15个数据，使得每次添加的数据不重复
+    if (arr.length == 0) {
+      btn.style.display = 'none'
+    }
+  }
+}
+btn.onclick = function () {
+  add()
+}
+$(".lang").click(() => {
+  // 切换页面文字的中英文
+  if (currLang === "en") {
+    $(".lang").text("English");
+    currLang = "zh-cn";
+    let show = Array.from(document.querySelectorAll('p'))
+    for (let i = 0; i < 3; i++) {
+      show.shift()   //删除前三个没用的p
+    }
+    for (let i = 0; i < show.length; i++) {
+      show[i].innerHTML = arr2[i].descriptionCN   //将对应的中英文进行转换
+    }
+  } else {
+    $(".lang").text("中文");
+    currLang = "en";
+    let show = Array.from(document.querySelectorAll('p'))
+    for (let i = 0; i < 3; i++) {
+      show.shift()
+    }
+    for (let i = 0; i < show.length; i++) {
+      show[i].innerHTML = arr2[i].descriptionEN
+    }
+  }
+  $("body")
+    .find("*")
+    .each(function () {
+      const text = $(this).text().trim();
+      if (translation[text]) {
+        $(this).text(translation[text]);
+      }
+    });
+  // TODO: 请在此补充代码实现项目描述的语言切换
+});
+```
+
+
+
+## 视频弹幕 难 √
+
+```js
+function renderBullet(bulletConfig, videoEle, isCreate = false) {
+    const spanEle = document.createElement("SPAN");
+    spanEle.classList.add(`bullet${index}`);
+    if (isCreate) {
+        spanEle.classList.add("create-bullet")
+    }
+    // TODO：控制弹幕的显示颜色和移动，每隔 bulletConfig.time 时间，弹幕移动的距离  bulletConfig.speed
+    let star = 850
+    spanEle.innerHTML = bulletConfig.value
+    spanEle.style.position = 'absolute'
+    spanEle.style.left = star + 'px'
+    spanEle.style.top = getRandomNum(560, start = 0) + 'px'
+    spanEle.style.color = `rgb(${getRandomNum(255, start = 0)},${getRandomNum(255, start = 0)},${getRandomNum(255, start = 0)})`
+    videoEle.appendChild(spanEle)
+    let ids = setInterval(() => {
+        star -= bulletConfig.speed
+        spanEle.style.left = star + 'px'
+        let { width } = getEleStyle(spanEle)
+        if (star <= -width) {
+            clearInterval(ids)
+            videoEle.removeChild(spanEle)
+        }
+    }, bulletConfig.time)
+
+}
+
+document.querySelector("#sendBulletBtn").addEventListener('click', () => {
+    // TODO:点击发送按钮，输入框中的文字出现在弹幕中
+    let inp = document.querySelector('#bulletContent')
+    const bulletConfig = {
+        isHide: false, // 是否隐藏
+        speed: 5, // 弹幕的移动距离
+        time: 50, // 弹幕每隔多少ms移动一次
+        value: inp.value// 弹幕的内容
+    }
+    renderBullet(bulletConfig, videoEle, isCreate = true)
+    inp.value = ''
+})
+```
+
+
+
+## echarts
+
+## 学生信息统计 1843 √
+
+```js
+	x y 轴不论是否有数据，都需要定义
+xAxis: {
+				data: ['张三', '李四', '王五', '贺八', '杨七', '陈九']
+
+			},
+			// y轴
+			yAxis: {
+			},
+			series: [
+				{
+					name: '成绩',
+					type: 'bar',
+					data: [55, 90, 65, 70, 80, 63]
+				},
+
+			]
+```
+
+
+
+## 学海无涯2280 √
+
+```js
+ async function getWeek() {
+      axios.get('./data.json').then((e) => {
+        let data = [...e.data.data['2月'], ...e.data.data['3月']]
+        let show = []
+        let xdata = ['2月第1周', '2月第2周', '2月第3周', '2月第4周', '3月第1周', '3月第2周', '3月第3周', '3月第4周', '3月第5周']
+        let sum = 0
+        for (let i = 1; i <= data.length; i++) {
+          sum = sum + data[i - 1]
+          if (i % 7 == 0) {
+              //注意这个里，每七天一周，最后几个数据不足七天则保存在sum里等循环结束后加入
+            show.push(sum)
+            sum = 0
+          }
+        }
+        show.push(sum)
+        option.series[0].data = show
+        option.xAxis.data = xdata
+        myChart.setOption(option);
+      })
+    }
+    getWeek()
+    async function getMonth() {
+      axios.get('./data.json').then((e) => {
+        let daat = e.data.data
+        let er = daat['2月'].reduce((a, b) => a + b, 0)
+        let san = daat['3月'].reduce((a, b) => a + b, 0)
+        let xdata = ['2月', '3月']
+        option.series[0].data = [er, san]
+        option.xAxis.data = xdata
+        myChart.setOption(option);
+      })
+    }
+
+```
+
+
+
+## 销量展示 2420 √
+
+```js
+注意使用object.keys和values取出对象的键值
+
+yAxis: [{
+        type: 'value',
+        name: '销售额',
+        position: 'left',
+    },
+    {
+        type: 'value',
+        name: '销量',
+        position: 'right',
+    }],
+// 销售额
+const saleObj = {};
+// 销量
+const countObj = {};
+        const respondBody = {
+            "code": 200,
+            "msg": "success",
+            "data": {
+                saleObj,
+                countObj
+            }
+        };
+        setTimeout(() => {
+            resolve(respondBody);
+        }, 1000)
+    })
+}
+
+async function renderChart() {
+    const result = await Ajax();
+    document.querySelector("#result").innerText = JSON.stringify(result);
+    const myChart = echarts.init(document.getElementById('main'));
+    // TODO：补全代码，正确给 X 轴的时间，以及 Y 轴的商品的销售额 saleObj 和销量赋值 countObj。
+    console.log();
+    charData.xAxis.data=Object.keys(countObj)
+    charData.series[0].data=Object.values(saleObj)
+    charData.series[1].data=Object.values(countObj)
+    myChart.setOption(charData, true);
+    document.querySelector("#data").innerText = JSON.stringify(charData);
+}
+```
+
+
+
+## 天气趋势 2466 √
+
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>天气趋势</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="./js/axios.js"></script>
+  <script src="js/vue.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div class="top-bar">2022年 Y 城全年温度统计图</div>
+    <!-- 主体 -->
+    <div class="container">
+      <!-- 月份 -->
+      <div class="month">
+        <ul>
+          <!-- TODO：待补充代码 在下面的 li 标签中完成 12个月份 (即 monthList) 的渲染  -->
+          <li ref="liYue" @click="changeAct($event)" v-for="(item,index) in monthList" :key="index"
+            :class="index===isMouth?'active':''">{{item}}
+          </li>
+        </ul>
+      </div>
+      <div class="chart">
+        <!-- TODO：待补充代码  -->
+        <!-- currentMonth  未来七天和本月 tab 切换，只有当前月才显示 -->
+        <div id="currentMonth">
+          <div class="title">
+            <h3>{{typeTitle}}</h3>
+            <div class="type">
+              <span @click="seven($event)" id="seven">未来7天</span>
+              <span @click="nowMonth($event)" id="current">本月</span>
+            </div>
+          </div>
+        </div>
+        <div id="chart"></div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
+<script>
+  // TODO：待补充代码
+  var vm = new Vue({
+    el: "#app",
+    data: {
+      x: [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+        19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+      ],
+      data: [],
+      day: '',
+      month: '',
+      isMouth: 'January',
+      chart: null, // 图表
+      chartOptions: null, // 图表配置项
+      typeTitle: "本月天气",
+      monthList: {
+        January: "1月",
+        February: "2月",
+        March: "3月",
+        April: "4月",
+        May: "5月",
+        June: "6月",
+        July: "7月",
+        August: "8月",
+        September: "9月",
+        October: "10月",
+        November: "11月",
+        December: "12月",
+      },
+    },
+    mounted: function () {
+      // 初始化 echarts
+      axios.get('./js/weather.json').then((e) => {
+        this.data = e.data
+        let yiyue = this.data[0].January
+        this.chartOptions.series[0].data = yiyue
+        this.chart.setOption(this.chartOptions);
+        let date = new Date()
+        this.month = date.getMonth()
+        this.day = date.getDay()
+      })
+      this.$nextTick(() => {
+        this.initChart();
+      });
+    },
+    methods: {
+      seven(e) {
+        let type = document.querySelector('.type')
+        type.children[1].className = ''
+        type.children[0].className = 'active'
+        let sevenDay = this.data[this.month]
+        let show = []
+        let xsize = []
+        Object.values(sevenDay).forEach((e) => {
+          for (let i = this.day - 1; i < this.day + 6; i++) {
+            show.push(e[i])
+            xsize.push(`${this.month + 1}/${i + 1}`)
+          }
+        })
+        this.change(xsize, show)
+      },
+      nowMonth(e) {
+        let type = document.querySelector('.type')
+        type.children[1].className = 'active'
+        type.children[0].className = ''
+        let date = new Date()
+        let arr = []
+        for (const key in this.data[this.month]) {
+          arr.push(this.data[this.month][key])
+        }
+        Object.values(this.$refs).forEach(collection => {
+          collection.forEach(e => {
+            e.classList.remove('active')
+            if (+e.innerHTML.replace(/[^\d]/, '') == this.month + 1) {
+              e.classList.add('active')
+            }
+          });
+        });
+        this.change(this.x, arr[0])
+      },
+      changeAct(e) {
+        Object.values(this.$refs).forEach(collection => {
+          collection.forEach(e => e.classList.remove('active'));
+        });
+        e.target.classList.add('active')
+        let act = +e.target.innerHTML.replace(/[^\d]/, '')
+        let arr = []
+        for (const key in this.data[act - 1]) {
+          arr.push(this.data[act - 1][key])
+        }
+        this.change(this.x, arr[0])
+      },
+      change(xsize, show) {
+        this.chartOptions.xAxis[0].data = xsize
+        this.chartOptions.series[0].data = show
+        this.chart.setOption(this.chartOptions);
+      },
+      initChart() {
+        // 初始化图表
+        this.chart = echarts.init(document.getElementById("chart"));
+        // 配置项
+        this.chartOptions = {
+          grid: {
+            top: 35,
+            bottom: 5,
+            left: 10,
+            right: 10,
+            containLabel: true,
+          },
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              lineStyle: {
+                color: {
+                  type: "linear",
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [
+                    {
+                      offset: 0,
+                      color: "rgba(255,255,255,0)",
+                    },
+                    {
+                      offset: 0.5,
+                      color: "rgba(255,255,255,1)",
+                    },
+                    {
+                      offset: 1,
+                      color: "rgba(255,255,255,0)",
+                    },
+                  ],
+                  global: false,
+                },
+              },
+            },
+          },
+          xAxis: [
+            {
+              type: "category",
+              boundaryGap: false,
+              axisLabel: {
+                formatter: "{value}",
+                fontSize: 12,
+                margin: 20,
+                textStyle: {
+                  color: "#bfbfbf",
+                },
+              },
+              axisLine: {
+                lineStyle: {
+                  color: "#e9e9e9",
+                },
+              },
+              splitLine: {
+                show: true,
+                lineStyle: {
+                  color: "#f7f7f7",
+                },
+              },
+              axisTick: {
+                show: false,
+              },
+              // x 轴显示的数据，日期
+              data: [
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+                19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+              ],
+            },
+          ],
+          yAxis: [
+            {
+              boundaryGap: false,
+              type: "value",
+              axisLabel: {
+                textStyle: {
+                  color: "#bfbfbf",
+                },
+                formatter: `{value}\u2103`,
+              },
+              nameTextStyle: {
+                color: "#fff",
+                fontSize: 12,
+                lineHeight: 40,
+              },
+              splitLine: {
+                lineStyle: {
+                  color: "#f7f7f7",
+                },
+              },
+              axisLine: {
+                show: true,
+                lineStyle: {
+                  color: "#e9e9e9",
+                },
+              },
+              axisTick: {
+                show: false,
+              },
+            },
+          ],
+          series: [
+            {
+              name: "天气",
+              type: "line",
+              smooth: false,
+              showSymbol: false,
+              symbolSize: 0,
+              zlevel: 3,
+              itemStyle: {
+                color: "#ff6600",
+                borderColor: "#a3c8d8",
+              },
+              lineStyle: {
+                normal: {
+                  width: 3,
+                  color: "#ff6600",
+                },
+              },
+              areaStyle: {
+                normal: {
+                  color: new echarts.graphic.LinearGradient(
+                    0,
+                    0,
+                    0,
+                    1,
+                    [
+                      {
+                        offset: 0,
+                        color: "#ff6600",
+                      },
+                      {
+                        offset: 0.8,
+                        color: "#ff9900",
+                      },
+                    ],
+                    false
+                  ),
+                },
+              },
+              //  Y 轴显示的数据，即温度数据
+              data: [
+                23, 19, 30, 31, 18, 20, 16, 15, 23, 27, 29, 30, 32, 23, 25, 20,
+                22, 24, 34, 24, 21, 26, 23, 24, 25, 23, 25, 28, 32, 20,
+              ],
+            },
+          ],
+        };
+
+        // 调用此方法设置 echarts 数据
+        this.chart.setOption(this.chartOptions);
+      },
+    },
+  });
+</script>
+```
+
+
+
+## 薪冠全球统计 5137 √
+
+```js
+两个注意点，必须使用watch进行监控用户的选择，必须使用county作为option的值，不允许使用countyCode
+傻逼判断机制
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>全球新冠疫情数据统计</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script src="js/axios.js"></script>
+  <script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+  <div id="app">
+    <header>
+      <div>
+        全球新冠疫情数据统计
+      </div>
+    </header>
+    <main>
+      <!-- TODO: 请修改以下代码实现不同国家的数据展示功能 -->
+      <div class="title">
+        <h2>{{isSelect?isSelect:'请选择国家'}}
+        </h2>
+      </div>
+      <div class="boxes">
+        <div class="box1">
+          <h3>确诊</h3>
+          <div class="number">
+            <span class="font-bold">新增:</span>
+            {{isFilter[0]? isFilter[0].NewConfirmed:0}}
+          </div>
+          <div class="number">
+            <span class="font-bold">总计:</span>
+            {{isFilter[0]? isFilter[0].TotalConfirmed:0}}
+          </div>
+        </div>
+        <div class="box2">
+          <h3>死亡</h3>
+          <div class="number">
+            <span class="font-bold">新增:</span>
+            {{isFilter[0]? isFilter[0].NewDeaths:0}}
+          </div>
+          <div class="number">
+            <span class="font-bold">总计:</span>
+            {{isFilter[0]? isFilter[0].TotalDeaths:0}}
+          </div>
+        </div>
+      </div>
+      <select v-model="isSelect">
+        <option value="">Select Country</option>
+        <option v-for="item in show" :value="item.Country">{{item.Country}}</option>
+        <!-- 请在此渲染所有国家选项 -->
+      </select>
+      <div id="chart" style="width: 100%; height: 50vh;"></div>
+    </main>
+  </div>
+</body>
+
+<script>
+  var vm = new Vue({
+    el: "#app",
+    methods: {
+      // TODO: 请修改该函数代码实现题目要求
+      initChart() {
+        // 初始化图表
+        this.chart = echarts.init(document.getElementById("chart"));
+        this.chartOptions = {
+          title: {
+            text: "全球感染人数前30国家累计确诊人数统计",
+            x: 'center',
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow',
+              label: {
+                show: true
+              }
+            }
+          },
+          // 设置x轴数据
+          xAxis: {
+            // 这里需要显示国家名称缩写，因为有些国家的全称太长，会导致界面不美观
+            data: [
+              "US",
+              "IN",
+              "FR",
+              "DE",
+              "BR",
+              "JP",
+              "KR",
+            ],
+            axisLabel: {
+              show: true,
+              interval: 0,
+            }
+          },
+          yAxis: {
+            type: 'value',
+            name: '确诊数量',
+          },
+          // 设置y轴数据
+          series: [
+            {
+              data: [
+                100856162, 44680355, 39560482, 37446795, 36362366, 29489769, 29299166,],
+              type: 'bar',
+              itemStyle: {
+                normal: {
+                  color: '#a90000'
+                }
+              }
+            },
+          ],
+        };
+        // 调用此方法设置 echarts 数据
+        this.chart.setOption(this.chartOptions);
+      },
+    },
+    // TODO: 请在此添加代码实现组件加载时数据请求的功能
+    mounted() {
+      axios.get('./js/covid-data.json').then((e) => {
+        this.show = e.data
+        let eshow = []
+        let eshow2 = []
+        e.data.forEach(e => {
+          eshow.push(e.CountryCode)
+          eshow2.push(e.TotalConfirmed)
+        });
+        this.chartOptions.xAxis.data = eshow
+        this.chartOptions.series[0].data = eshow2
+        this.chart.setOption(this.chartOptions);
+      })
+      this.initChart();
+    },
+    data() {
+      return {
+        show: [],
+        isSelect: '',
+        isFilter: [],
+      }
+    },
+    watch: {
+      isSelect(n, o) {
+        if (n == '') {
+          this.isFilter = []
+        } else {
+          this.isFilter = this.show.filter((e) => {
+            return e.Country == n
+          })
+        }
+      }
+    }
+  });
+</script>
+
+</html>
+```
+
+# 2024三套模拟题详解第一套
+
+## 1动态tab栏
+
+```css
+ 写这题务必了解position的几个属性
+定位元素（positioned element）是其计算后位置属性为 relative, absolute, fixed 或 sticky 的一个元素（换句话说，除static以外的任何东西）。
+相对定位元素（relatively positioned element）是计算后位置属性为 relative的元素。相对于当前自身的位置进行偏移，不会脱离文档流
+绝对定位元素（absolutely positioned element）是计算后位置属性为 absolute 或 fixed 的元素。相对于外层不是static的第一个父元素位置进行移动（子决父相），会脱离文档流
+粘性定位元素（stickily positioned element）是计算后位置属性为 sticky 的元素。粘性定位效果类似于本题目
+固定定位 （position：fiexd） 相对于视口位置进行定位，类似于网页上按我回到顶部按钮
+
+position: sticky;
+  top: 0px;
+```
+
+## 2地球漫游
+
+```css
+做本体，你需要了解css3的动画属性
+@keyframes orbit{ 用来定义一个动画，robit是名称，里面写关键帧，例如0%，50% 100%可以写好几个关键帧
+    0%{
+        写css样式
+    }
+    100%{
+        写css样式
+    }
+}
+animation 属性是 
+animation-name，动画名称
+animation-duration，动画执行一次需要多少时间
+animation-timing-function，速度曲线 常见的(linear(线性)、ease、ease-in、ease-out、ease-in-out以及cubic-bezier函数)
+animation-delay， 动画开始前的延迟
+animation-iteration-count 动画播放的次数(1表示1此 infinite 表示无限循环播放)
+animation-direction，是否反向播放(normal、reverse、alternate和alternate-reverse。)
+animation-play-state 是否允许暂停(running或paused。)
+
+下面这个就是代表
+执行orbit动画，每个周期36.5秒，线性循环，并且无限播放    注意注意，只要关键字正确，顺序无所谓
+哪怕你写成这样  animation: 36.5s orbit  linear infinite ;也是可以的，但是关键字要记住，记不住就去浏览器控制台看
+animation: orbit 36.5s infinite linear;(动画名称已给出，在最下面)
+```
+
+## 迷惑的this
+
+```js
+做这道题你需要了解this指向问题以及改变this指向的几种方式
+首先this指向问题
+- 在函数体中，非显式或隐式地简单调用函数时，在严格模式下，函数内的 this 会被绑定到 undefined 上，在非严格模式下则会被绑定到全局对象 window/global 上。
+- 一般使用 new 方法调用构造函数时，构造函数内的 this 会被绑定到新创建的对象上。
+- 一般通过 call/apply/bind 方法显式调用函数时，函数体内的 this 会被绑定到指定参数的对象上。
+- 一般通过上下文对象调用函数时，函数体内的 this 会被绑定到该对象上。
+- 在箭头函数中，this 的指向是由外层（函数或全局）作用域来决定的
+
+
+
+call 和 apply 的功能相同，区别在于传参的方式不一样:
+
+- fn.call(obj, arg1, arg2, ...) 调用一个函数, 具有一个指定的 this 值和分别地提供的参数(参数的列表)。
+- fn.apply(obj, [argsArray]) 调用一个函数，具有一个指定的 this 值，以及作为一个数组（或类数组对象）提供的参数。
+
+bind 和 call/apply 有一个很重要的区别，一个函数被 call/apply 的时候，会直接调用，但是 bind 会创建一个新函数。当这个新函数被调用时，bind( ) 的第一个参数将作为它运行时的 this，之后的一序列参数将会在传递的实参前传入作为它的参数
+
+
+let newinp = this.handleInput.bind(this)
+    this.inputEl.addEventListener('input',newinp )  //最好的方法
+或者
+    let newinp = this.handleInput.bind(this)
+    this.inputEl.oninput = newinp
+或者
+this.inputEl.oninput = (e) => {
+      this.handleInput.call(this, e)
+    }
+```
+
+## 魔法失灵
+
+```vue
+做这道题，首先你需要了解vue的响应式以及结构赋值在vue里面的副作用
+这道题的问题是响应式的丢失，及当使用解构赋值的时候，响应式丢失如何处理
+1使用torefs或者toref，二者都可以讲一个响应式的对象解构赋值，区别是，
+toref的语法为toref(obj,'具体的属性')
+而torefs是torefs(obj)  一个针对某一具体属性，一个针对整个对象
+2 不进行解构赋值，对应下面第二种写法
+详细看官方文档https://cn.vuejs.org/api/reactivity-utilities.html#torefs
+方法一：
+    const { reactive, toRefs, createApp } = Vue;
+  let {value} = toRefs(data);
+方法二：
+这种方法更改了原来的代码，对value不解构赋值了，而采用直接对响应式数据data里面的value进行相加减
+<button @click="update(-- data.value)">-</button>
+          <span>{{ data.value }}</span>
+          <button @click="update(++ data.value)">+</button         
+<script>
+    const { reactive, toRefs, createApp } = Vue;
+
+    const data = reactive({
+      value: 100,
+    });
+    //TODO：待修复代码
+    // let {value} ={...data}
+    function update(val) {
+      data.value = val;   //注意看这里，如果直接对data里面的数据操作，不会引起响应式的丢失
+    }
+    const app = createApp({
+      setup() {
+        return {
+          data,
+          // value,
+          update,
+        };
+      },
+    });
+    app.mount("#app");
+  </script>
+方法三 讲rective替换成ref
+  const { reactive, toRefs,ref createApp } = Vue;
+   const data = ref({
+      value: 100,
+    });
+```
+
+## 燃烧卡路里
+
+```js
+这道题有个bug，再axios请求的位置
+控制台报错的，去改一下index.js里面的axios请求里面的地址，./而不是../所以获取不到数据，估计是官方的一个bug，自己看下
+let res = await axios.get("./mock/menu.json")
+原本是let res = await axios.get("../mock/menu.json")，改成上面的，../和./位置不同，想了解可以自己百度一下
+
+第一问
+​```
+<el-drawer title="我是标题" v-model='drawer' :with-header="false" size="60%"  :direction="direction">//html中
+drawer.value = true  //index.js中的   // TODO 待添加的代码 功能显示抽屉组件
+第二问
+排序，注意，不知道为什么，如果你先进行sort进行排序的话，排序是无效的，也不清楚为什么，你们可以试一下，先进行排序，看看排序结果是否跟原数据变了，我这个先排除不符合条件的数据，然后再排序
+     const result = arr.filter(s => s[pro] < compare)
+      let s = result.sort((a, b) => b[pro] - a[pro])[0]
+      return s
+这种方法理论来说也是可以的，不知道为什么先排序无法实习正常排序，待后人研究发现
+   let arrs = arr.sort((a, b) => {
+        return b[pro] - a[pro]
+      })
+      let s = arrs.find((e) => {
+        return e[pro] <= compare
+      })
+      return s
+​```
+
+```
+
+## 司令统计
+
+```js
+写这道题需要有一定的echats基础，自行了解吧
+第一问，按照指定属性进行分类
+//再es2024有了新的api object/map.groupby(obj,()=>分类属性) 进行分类，但是比赛无法使用
+//https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/groupBy 自己了解一下
+const groupByAge = (peoples) => {
+  // TODO:待补充代码，按照年龄进行分组
+  let result = {}
+  for (const key in peoples) {
+    let a = peoples[key].age  //要分类的属性
+    if (result[a]) {
+      result[a].push(peoples[key])
+    } else {
+      result[a] = [peoples[key]]
+    }
+  }
+  return result
+};
+如果你实在想用新的api，就手写一个吧
+// function groupBy(array, keyFn) {
+//   return array.reduce((acc, item) => {
+//     const key = keyFn(item);
+//     if (!acc[key]) {
+//       acc[key] = [];
+//     }
+//     acc[key].push(item);
+//     return acc;
+//   }, {});
+// }
+第二问，设置xy坐标属性
+ setup() {
+    const { updateData } = useECharts();
+    let xAxisData = Vue.ref([]); // X 轴数据，司龄从小到大排列
+    let seriesData = Vue.ref([]); // Y 轴数据，司龄对应的人数
+    const groupedPeople = Vue.ref([]); // table 中显示的数据
+    Vue.onMounted(async () => {
+      const data = await (await fetch("./mock/data.json")).json();
+      groupedPeople.value = groupByAge(data); //把请求回来的数据变成需要的数据格式
+      // TODO: 设置 Echars X 轴数据 xAxisData 和 Y 轴数据 seriesData
+      xAxisData.value = Object.keys(groupedPeople.value) //设置x
+      seriesData.value = xAxisData.value.map((e) => {  //设置y
+        return Object.values(groupedPeople.value[e]).length
+      });
+      // 更新 echars 数据
+      updateData(xAxisData.value, seriesData.value);
+    });
+```
+
+## 不翼而飞的余额
+
+```js
+做本题，你需要了解pinia与vue3  vuerouter
+写本题目，你首先要了解vuerouter3与4的语法差异，再vuerouter4中
+语法变成了由createRouter, createWebHistory来创建路由和使用history模式，而hash模式则是createWebHashHistory
+routes里面以一个数组的形式来写路由，最主要的是path路径和对应的组件
+详细来这里 https://router.vuejs.org/zh/guide/
+第一问 创建路由
+ const { createRouter, createWebHistory } = VueRouter;
+const router = createRouter({
+      // TODO:待补充代码，为项目配置 history 模式的路由
+      history: createWebHistory(),
+      routes: [{
+        path: '/deposit',
+        component: DepositPage
+      },
+      {
+        path: '/',
+        component: WalletPage
+      },
+      ]
+    })
+
+第二问，使用pinia进行组件通讯，针对pinia，可以来这里了解一下基本的使用方法
+https://pinia.web3doc.top/introduction.html
+
+pinia中 就是 js里面的store.js
+const { defineStore, storeToRefs } = Pinia
+const { ref } = Vue;
+
+// TODO：待补充代码
+const useMoneyStore = defineStore('money', () => {
+  const balance = ref(23);
+  function add(val) {
+    balance.value += val
+  }
+  return {
+    balance,
+    add
+  }
+})
+
+depositPage.js中
+const DepositPage = {
+  template: `
+    <div class="deposit-page wallet-page">
+      <div class="wallet-header">
+        <h1>Deposit</h1>
+        <div class="wallet-balance">
+          <h2>Balance</h2>
+          <p>
+          <!-- TODO：待补充代码，在 # deposit-balance 中正确显示钱包余额  -->  
+           <span id="deposit-balance">{{balance}}</span>
+           <span>ETH</span>
+          </p>
+        </div>
+      </div>
+      <div class="deposit-body">
+        <p>Please enter the amount you want to deposit:</p>
+        <input type="number" v-model="depositAmount" />
+        <button @click="deposit">Deposit</button>
+      </div>
+    </div>`,
+  setup() {
+    const depositAmount = Vue.ref() // 输入框中的的值->存款金额
+    const store = useMoneyStore()  // 引入 store
+    let { balance } = storeToRefs(store)
+    let { add } = store
+    // TODO：待补充代码，完善点击存款按钮事件
+    function deposit() {
+      add(depositAmount.value)
+      depositAmount.value = ''
+    }
+    return {
+      depositAmount,
+      deposit,
+      balance,
+      add
+    }
+  }
+}
+```
+
+## 个性化推荐
+
+不会写，涉及nodejs，有缘人补之
+
+## 贪吃蛇
+
+```js
+理清思路，也不难
+首先我们要明白，蛇的身体坐标是这样的
+ [{ left: 2, top: 0 }, { left: 1, top: 0 }, { left: 0, top: 0 }]` 
+从这个数组我们可以看到，第一位arr[0],这个位置代表的是蛇头，跟图中的位置是不一样的，图里面很明显可以看到，蛇头再第三个位置，但是从这个身体坐标的构成我们可以看到，第1位才是蛇头，注意不要被迷惑。
+那么清除这个之后我们就要思考，如何让它动起来。
+通过测试我们可以发现，数组第0位永远都是蛇头，不管这个数组怎么变化，第一位永远绑定了蛇头的样式
+那么又该如何让他移动呢
+我们只需要删除尾巴，新增一个头，就可以达到移动的效果，因为第一个永远是头，所以不需要担心头的坐标怎么办
+首先我们需要拿到当前这个蛇的头的位置，通过仔细阅读代码，我们发现
+  this.snakeBody这个就是组成蛇的数组，他的第0位就是蛇头
+那么现在我们有了蛇头的位置了，我们需要得到每次移动的具体坐标
+let nesnhad = {} 定义一个新的头坐标
+通过switch case语法，根据this.direction（当前蛇移动的方向）
+对nesnhad重新赋值，从init函数中，我们可以看到，size是20，也就意味着，一个身体部分占20大小
+所以我们在旧头部的基础上+-20就得到新的头部坐标
+再把新的头坐标unshift加入到数组的第一位，当做新的头部，然后删除最后一位的尾巴，形成视觉上的移动
+
+ nextStep() {
+        // TODO：待补充代码   
+        console.log(this.snakeBody);
+        let snkhead = this.snakeBody[0]
+        let nesnhad = {}
+        switch (this.direction) {
+            case 'right':
+                nesnhad = {
+                    top: snkhead.top,
+                    left: snkhead.left + 20,
+                }
+                break;
+            case 'down':
+                nesnhad = {
+                    top: snkhead.top + 20,
+                    left: snkhead.left,
+                }
+                break;
+            case 'left':
+                nesnhad = {
+                    top: snkhead.top,
+                    left: snkhead.left - 20,
+                }
+                break;
+            case 'up':
+                nesnhad = {
+                    top: snkhead.top - 20,
+                    left: snkhead.left,
+                }
+                break;
+        }
+        this.snakeBody.pop()
+        this.snakeBody.unshift(nesnhad)
+    }
+```
+
+## 自定义表单验证
+
+如果你能写到这里来，那么省一一定没问题了，几乎8道题就可以拿省一了，剩下两道一道涉及node一道涉及表单验证，不好拿分，只做第一问即可，加油~
+
+```js
+第一问  你需要了解 在vue3中 v-model方式进行组件通讯
+对于v-model的传递形式用在父子 子父都可以
+用在自定义组件时
+例如
+parent
+<fuzujian v-model='name'>
+    
+ child
+首先需要声明接收
+defineProps(['modelValue'])
+const emit=defineEmits([update:modelValue])
+触发的时候需要写
+emit('update:modelValue',date)
+注意，在这种情况下，modelvalue无法改变，如果在父元素 v-model：qw  这样写，则后面的modelValue可以更替
+如果没有使用setup语法糖的情况下
+应该
+props:{//进行接收
+    value
+}
+setup(props,{emit}){
+    emit('update:modelValue',val) 进行通知父组件
+}
+
+const FormInput = {
+  template: `
+  <div>
+    <input @input='changeInp' class="form-input" :placeholder="holder" v-model="inputValue"  />
+    <div v-if="showMessage" class="error-message">{{ showMessage }}</div>
+  </div>
+  `,
+  props: {
+    value: String, // v-model 绑定的值，这里取名为 inputValue
+    showMessage: String, // 是否显示消息
+    holder: String, // 输入框的占位符
+  },
+  setup(props, { emit }) {
+    const inputValue = ref(props.value);
+    const holder = ref(props.holder)
+    //  TODO：目标 1 当输入框的值变化时，触发 input 事件更新父组件的 v-model 值
+    function changeInp() {
+      emit('update:modelValue', inputValue.value)
+    }
+    //  TODO：end
+    return {
+      inputValue,
+      holder,
+      changeInp
+    };
+
+  },
+};
+第二问  需要了解正则表达式 https://www.runoob.com/regexp/regexp-syntax.html
+const is_email = (val) => {
+  // TODO：目标 2 待补充代码
+  let reg = /[a-zA-Z0-9]+@[a-zA-z0-9]+\.[a-zA-Z]{2,4}/
+  return reg.test(val)
+}
+第三问  进行表单验证，返回promise ，请先去了解promise，放弃放弃，有点难，我也没看懂
+const validateForm = () => {
+      return new Promise((resolve, reject) => {
+        errors.value = {}; // 清空之前的错误信息
+        // TODO：目标 3 编写通用的表单验证规则，并将错误信息放置到 errors 对象中
+        const { rules, formData } = props
+        rules.nickname[0].validator(rules, formData.nickname, (e) => {
+          if (e) {
+            errors.value = {
+              ...errors.value,
+              nickname: e.message
+            }
+          }
+        })
+        if (!validateByType('email', formData.email)) {
+          if (formData.email.trim().length === 0) {
+            errors.value = {
+              ...errors.value,
+              email: rules.email[0].message
+            }
+          } else {
+            errors.value = {
+              ...errors.value,
+              email: rules.email[1].message
+            }
+          }
+        }
+        // TODO：END
+        if (hasErrors.value) {
+          resolve(false); // 存在错误，验证失败
+        } else {
+          resolve(true); // 不存在错误，验证通过
+        }
+
+        // 触发 "valid" 事件，并传递错误信息对象
+        emit("valid", errors.value);
+      });
+    };
+```
+
+# 2024三套模拟题详解第二套
+
+## 相等不相等  通过率84.3%
+
+```js
+没啥好讲的，看清题目，接收另一个值，就不要在拿val当参数了
+var expectFn = function (val) {
+  // TODO
+  return {
+    toBe: function (val1) {
+      return val === val1 ? true : 'NotEqual'
+    },
+    notToBe:function(val1){
+      return val !== val1 ? true : 'Equal'
+    }
+  }
+};
+```
+
+## 三行情书 通过率91.3%
+
+```css
+做这道题，你需要了解css的溢出隐藏的几个关键属性
+ overflow: hidden; 开启溢出隐藏
+ text-overflow:ellipsis;隐藏内容转换成...
+white-space:nowrap; 不换行才能溢出
+
+span {
+    font-size: 20px;
+    color: #837362;
+    /* TODO：补充下面的代码 */
+    display:block;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+依据题目要求，开启webkit-box盒子
+要了解wekbit-box的几个属性
+    -webkit-box-orient: vertical; //垂直排列
+    -webkit-line-clamp: 3;//仅保留3行
+p {
+    color: #837362;
+    /* TODO：补充下面的代码 */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+```
+
+## 电影院订票  通过率65%
+
+稍微难一点出在第三题的位置显得有点难
+
+```js
+做这道题，你需要了解针对class的动态设置以及创建和添加dom元素，同时，尽量避免对每个作为设置点击事件，避免性能上的浪费，采用事件委托的方式
+// 获取座位区域节点
+const seatAreaNode = document.getElementById("seat-area");
+// 获取电影名节点
+const movieNameNode = document.getElementById("movie-name");
+// 获取电影票价节点
+const moviePriceNode = document.getElementById("movie-price");
+// 获取已订电影票数量节点
+const count = document.getElementById("count");
+// 获取已订电影票总价节点
+const total = document.getElementById("total");
+
+axios.get("./data.json").then((e) => {
+  let data = e.data;
+  movieNameNode.innerHTML = data.name;
+  moviePriceNode.innerHTML = data.price;
+  data.seats.forEach((e) => {
+    let row = document.createElement("div");
+    row.className = "row";
+    e.forEach((s) => {
+      let zuo = document.createElement("div");
+      zuo.className = "seat";
+      if (s == "1") {    //两次遍历，如果是1就代表当前位置已经被占有了
+        zuo.classList.add("occupied");
+      }
+      row.appendChild(zuo);
+    });
+    seatAreaNode.appendChild(row);
+  });
+  seatAreaNode.onclick = function (e) {
+    if (e.target.className.includes("selected")) {
+      e.target.classList.remove("selected");
+      total.innerText = +total.innerHTML - 20;
+      count.innerText = +count.innerText - 1;
+    } else if (e.target.className.includes("occupied")) {
+      return;
+    } else {
+      e.target.classList.add("selected");
+      total.innerText = +total.innerHTML + 20;
+      count.innerText = +count.innerText + 1;
+    }
+  };
+});
+```
+
+## 老虎机 通过率84.8%
+
+```js
+dom元素题目头部已经给出，无需再次获取dom
+要注意的是，在进行三次相等判断时，由于先进行判断的会返回true或者false，而‘4’是不等于true的，所以4==4==4也是不相等的，因为会从左向右进行计算，如果要进行连续判断相等，请使用&&运算符
+仔细看题目，了解给的参数是什么，这题还是很好写的，比上面那道题好些很多
+
+了解一下，当标签内出现自定义属性data-xx的时候，可以使用dataset.xx来获取到，不需要使用getattribute
+
+GetResult(r1, r2, r3) {
+    // TODO 待补充代码
+    let first1 = sevenFirst.querySelectorAll('.item')
+    let two1 = sevenSecond.querySelectorAll('.item')
+    let there1 = sevenThird.querySelectorAll('.item')
+    if (first1[r1 - 1].dataset.point == two1[r2 - 1].dataset.point && two1[r2 - 1].dataset.point == there1[r3 - 1].dataset.point) {
+      textPanel.innerHTML = '恭喜你，中奖了'
+    } else {
+      textPanel.innerHTML = '很遗憾，未中奖'
+    }
+  }
+}
+```
+
+## 星际通讯 85%
+
+```js
+注意情况考虑全面，如果给的不正好是3的倍数，请考虑到剩下的几位怎么处理
+这道题整体思路为，将传入的字符串每三位划分一次，跟对象里面的数据进行对比，如果对象里面的key对应的上，就把value的值拼接到result字符串中
+
+const translate = (alienMessage) => {
+  // TODO：待补充代码
+  let test = ''
+  let result = ''
+  if (alienMessage === '') {
+    return ''  //如果什么也没有输入，就返回空字符串
+  }
+  for (let i = 1; i <= alienMessage.length; i++) {
+    test += alienMessage[i - 1]
+    if (i % 3 == 0) { //每三位进行划分一次
+      if (codonTable[test] && codonTable[test] != 'stop') {
+        result += codonTable[test]
+      }
+      else if (codonTable[test] == 'stop') {
+        return result
+      } else {
+        result = '无效密语'
+        return result
+      }
+      test = ''
+    }
+  }
+  if (test !== '') {
+      //不足三位的就会剩下来，也就无法满足对比，返回无效谜语
+    result = '无效密语'
+  }
+  return result
+};
+```
+
+## 蓝桥排位赛 60%
+
+```js
+难度一般
+echarts东西较多，不放上来了
+ setup() {
+    const chartsData = ref([]);
+    let data = ref([])  //map数据
+    let show = ref([])   //地图展示的数据
+    let school2 = ref([]) //学校数据
+    let schoolTop10Name = ref([])//学校前十的名字
+    let schoolTop10Power = ref([])//学校前10的power
+    onMounted(async () => {
+      // TODO:待补充代码 请求数据，并正确渲染柱形图和地图
+      await axios.get('./mock/map.json').then((e) => {
+        data.value = e.data
+        e.data.forEach((e) => {
+            //将数据重新封装成需要的对象，存起来
+          let obj = {
+            name: e.name,
+            value: e.value,
+            school_count: e.school_count,
+          }
+          show.value.push(obj)  //存到要展示的学校里
+          school2.value.push(e.school_power)//将power存起来
+        })
+        school2.value = school2.value.flat(9) //将多维数组展开为1维数组
+        school2.value.sort((a, b) => {
+          return b.power - a.power  //排序
+        })
+        school2.value.slice(0, 10).forEach((e) => {
+          schoolTop10Name.value.push(e.name) //分离key与valuie不知道为什么，无法使用objectkeys与values进行分离
+          schoolTop10Power.value.push(e.power)
+        })
+      })
+      showChartBar();
+      showChinaMap();
+    });
+
+     
+     柱状图部分做修改的
+       xAxis: {
+          type: 'category',
+          axisLabel: { interval: 0, rotate: 40 },
+          // TODO：待修改  柱状图 x 轴数据 -> 前 10 学校名称
+          data: schoolTop10Name.value
+        },
+         series: [
+          {
+            // TODO：待修改   柱状图 y 轴数据->学校战力值
+            data: schoolTop10Power.value,
+            type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)',
+            },
+            itemStyle: {
+              color: '#8c7ae6',
+            },
+          },
+        ],
+    地图部分
+        series: [
+          {
+            type: 'map',
+            geoIndex: 0,
+            // TODO:待修改 地图对应数据
+            data: show.value
+          },
+        ],
+```
+
+## 拼出一个未来 71%
+
+```js
+这题判断机制有问题，首先在log语句这个地方，如果你不打印一下报这个错误，加上打印语句就不报错了
+index.js:85 Uncaught ReferenceError: Cannot access 'newTar' before initialization
+
+然后是两个解构赋值交换顺序的地方，如果不加上冒号，会导致图片丢失的问题找不到资源的问题，加上就没有这个情况了，切记切记
+
+关于两个变量交换值的问题
+1 借助第三变量
+2 进行加减操作
+3 解构赋值   自行了解吧
+
+function drop(event) {
+    // 检查是否拖动的拼图块不是当前目标拼图块
+    // draggedPiece 被拖动的拼图块元素。this 目标位置的拼图块元素。
+    if (draggedPiece !== this) {
+        // TODO：待补充代码 
+        let oldTar = draggedPiece.childNodes[0]
+        let newTar = this.childNodes[0]
+        console.log(oldTar, newTar);
+        [oldTar.src, newTar.src] = [newTar.src, oldTar.src];
+        [oldTar.dataset.id, newTar.dataset.id] = [newTar.dataset.id, oldTar.dataset.id];
+        let imgs = document.querySelectorAll('img[data-id]')
+        let isok = []
+        for (let i = 1; i <= imgs.length; i++) {
+            imgs[i - 1].dataset.id == i ? isok.push(true) : isok.push(false)
+        }
+        let ok = isok.every((e) => {
+            return e === true
+        })
+        ok === true ? successMessage.className = 'show' : successMessage.className = 'hide'
+    }
+    // 重置正在拖动的拼图块
+    draggedPiece = null;
+}
+```
+
+## 超能英雄联盟 53.5%
+
+如果你能写出来这道题，省一就有了
+
+这道题偏难，需要用到pinia，watch，computed的知识，当然你也可以把一些方法写到pinia里，然后解构出来到处使用，写道actions里
+
+这题中规中矩，如果你的vue3学的还可以，那么问题不会太大
+
+值得一提的是，我在store里使用了removeId这个数组，本来并不想使用数组的，本来是使用number的
+
+当移除某一项的时候，将移除哪一项的id传入，在hero组件进行监视这个removeid，从而取消按钮的禁用状态，但是，我们都知道watch监视的是变化的数据，当你加入同一个英雄，移除同一个英雄时再加入同一个英雄再移除时，由于移除的id是没有发生变化的，导致无法重新禁用按钮组件，于是采取数组的形式，每次移除往里面push一个id，移除这个数组里最后一个id的btn就可以了
+
+```js
+const { defineStore, storeToRefs } = Pinia;
+const { ref, onMounted, watch, computed } = Vue;
+
+const useHeroStore = defineStore("hero", {
+  state: () => ({
+    heroes: [], //英雄列表
+    team: [], // 队伍列表
+    removeId: ref([]) //用来存储谁被移除了的id，方便通知将原来禁用的btn解除
+  }),
+  // TODO:补全代码，实现目标效果
+  getters: {},
+  actions: {},
+  // TODOEnd
+});
+```
+
+```js
+// TODO:补全代码，实现目标效果
+const HeroList = {
+  template: `
+  <div class="hero-list">
+    <h2>可选英雄</h2>
+    <ul>
+      <li v-for="item in heroes" :key='item.id' class="hero-item">
+        <span>{{item.name}}</span>
+        <span>{{item.ability}}</span>
+        <span>{{item.strength}}</span>
+        <button :id='item.id' ref='btn' @click='addHero(item,$event)'>添加至队伍</button>
+      </li>
+    </ul>
+  </div>
+  `,
+  setup() {
+    let hero = useHeroStore()
+    let btn = ref()
+    let { heroes, team, removeId } = storeToRefs(hero)
+    function addHero(item, e) {
+      team.value.push(item)
+      e.target.innerHTML = '已添加'
+      e.target.setAttribute('disabled', true)
+    }
+    onMounted(() => {
+      axios.get('./js/heroes.json').then((e) => {
+        heroes.value = e.data
+      })
+    })
+    watch(removeId, (value) => {
+      let len = value.length
+      let isbtn = btn.value.filter(e => {
+        if (e.id == value[len - 1]) {
+          return e
+        }
+      });
+      isbtn[0].innerHTML = '添加至队伍'
+      isbtn[0].removeAttribute('disabled')
+    }, {
+      deep: true
+    })
+    return {
+      hero,
+      heroes,
+      addHero,
+      team,
+      btn,
+      removeId
+    }
+  },
+
+};
+// TODOEnd
+```
+
+```js
+// TODO:补全代码，实现目标效果
+const TeamList = {
+  template: `
+  <div class="team-list">
+      <h2>我的队伍</h2>
+      <ul>
+        <li v-for="item in team " :key="item.id" class="team-item">
+          <span>{{item.name}}</span>
+          <span>{{item.strength}}</span>
+          <button @click='remove(item,$event)'>移除</button>
+        </li>
+      </ul>
+      <button class="sort-button" @click=sorts>按实力排序</button>
+      <p class="total-strength">当前队伍战斗力：{{power}} </p>
+  </div>
+  `,
+  setup() {
+
+    let hero = useHeroStore()
+    let { heroes, team, removeId } = storeToRefs(hero)
+    function remove(item) {
+      removeId.value.push(item.id)
+      team.value = team.value.filter(e => {
+        return e.id !== item.id
+      });
+    }
+    function sorts() {
+      team.value = team.value.sort((a, b) => {
+        return b.strength - a.strength
+      })
+    }
+    let power = computed(() => {
+      let sum = 0
+      team.value.forEach(e => {
+        sum += e.strength
+      });
+      return sum
+    })
+    return {
+      heroes,
+      hero,
+      team,
+      power,
+      remove,
+      sorts,
+      removeId
+    }
+  },
+};
+// TODOEnd
+
+```
+
+## 实时日志展示
+
+不会写，涉及node，后人有缘补之
+
+## 账户验证
+
+这题太难，只会写第一问，拿了14分，但是功能上是全部实现了的，就是不知道这个判题机制怎么回事
+
+```js
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>账户验证</title>
+  <link rel="stylesheet" type="text/css" href="./css/index.css" />
+  <link rel="stylesheet" href="./css/element-plus@2.3.7/index.css" />
+  <script src="./js/vue3.global.js"></script>
+  <script src="./css/element-plus@2.3.7/index.full.js"></script>
+  <script type="importmap">
+      {
+        "imports": {
+          "vue-demi": "./js/index.mjs",
+          "vue": "./js/vue.esm-browser.prod.js",
+          "pinia": "./js/pinia.esm-browser.js"
+        }
+      }
+    </script>
+  <script src="./js/pinia.esm-browser.js" type="module"></script>
+</head>
+
+<body>
+  <!-- app根组件开始 -->
+  <div id="app">
+    <div class="header">
+      <img class="back-btn" src="images/arrow.png" />
+      <span id="main_title">使用手机号登录</span>
+      <span class="blank"></span>
+    </div>
+    <component :is="showName2"></component>
+  </div>
+  <!-- app根组件结束 -->
+
+  <!-- phone组件开始 -->
+  <template id="phone">
+    <div>
+      <ul class="phone">
+        <span>输入手机号码</span>
+        <li>
+          <input type="text" v-model="phoneNumber" autofocus id="numberInput" />
+        </li>
+        <li>
+          <input v-model="isok" type="checkbox" name="" id="checkbox" />
+          <span>已阅读并同意
+            <a href="javascript:;">服务协议</a>
+            和
+            <a href="javascript:;">隐私保护指引</a>
+          </span>
+        </li>
+        <button @click="next" id="btn">下一步</button>
+      </ul>
+    </div>
+  </template>
+  <!-- phone组件结束 -->
+
+  <!-- check组件开始 -->
+  <template id="check">
+    <ul class="number">
+      <span>输入短信验证码</span>
+      <li class="hassend">
+        已向
+        <i>{{str}}</i>
+        发送验证码
+      </li>
+      <li class="code-container">
+        <input type="number" v-model="inp[0]" class="code" min="0" max="9" required />
+        <input type="number" v-model="inp[1]" class="code" min="0" max="9" required />
+        <input type="number" v-model="inp[2]" class="code" min="0" max="9" required />
+        <input type="number" v-model="inp[3]" class="code" min="0" max="9" required />
+        <input type="number" v-model="inp[4]" class="code" min="0" max="9" required />
+        <input type="number" v-model="inp[5]" class="code" min="0" max="9" required />
+      </li>
+      <a @click="resit" href="javascript:;" id="resend">重新发送</a>
+    </ul>
+  </template>
+  <!-- check组件结束 -->
+
+  <!-- success组件开始 -->
+  <template id="success">
+    <div class="success">
+      <ul>
+        <div>验证成功！</div>
+        <div>5s后将自动跳转</div>
+      </ul>
+    </div>
+  </template>
+  <!-- success组件结束 -->
+</body>
+<script type="module">
+  import { createPinia, defineStore, storeToRefs } from "pinia";
+  const { createApp, ref, reactive, toRefs, onMounted, watch } = Vue;
+  const { ElNotification } = ElementPlus;
+
+  const app = createApp({
+    setup() {
+      let store1 = useStore()
+      let { yz, showName2 } = storeToRefs(store1)
+      // TODO:补全代码实现目标需求
+      return {
+        showName2
+      };
+    },
+  });
+  app.use(ElementPlus);
+  app.use(createPinia())
+  const useStore = defineStore('stores', {
+    state: () => {
+      return {
+        yz: ref(''),
+        showName2: ref("phone"),
+        phoneNumber2: ref('')
+      }
+    },
+  })
+  app.component("phone", {
+    template: "#phone",
+    setup() {
+      // TODO:补全代码实现目标需求
+      let isok = ref();
+      let store1 = useStore()
+      let { yz, showName2, phoneNumber2 } = storeToRefs(store1)
+      let phoneNumber = ref('')
+      let reg = /\b18[0-9]{9}/
+      function next() {
+        if (isok.value === undefined && !reg.test(phoneNumber.value)) {
+          ElNotification({
+            title: '发送失败',
+            message: '请先阅读并同意下方协议',
+            type: 'error',
+          })
+          return
+        }
+        if (isok.value && reg.test(phoneNumber.value)) {
+          for (let i = 0; i < 6; i++) {
+            yz.value += Math.floor(Math.random() * 10)
+          }
+          ElNotification({
+            title: '发送成功',
+            message: `您的验证码为${yz.value}`,
+            type: 'success',
+          })
+          phoneNumber2.value = phoneNumber.value
+          showName2.value = 'check'
+        } else if (!isok.value) {
+          ElNotification({
+            title: '发送失败',
+            message: '请先阅读并同意下方协议',
+            type: 'error',
+          })
+        } else if (!reg.test(phoneNumber.value)) {
+          ElNotification({
+            title: '发送失败',
+            message: '无效的手机号码',
+            type: 'error',
+          })
+        }
+
+
+      }
+      return {
+        isok,
+        next,
+        phoneNumber,
+        phoneNumber2
+      };
+    },
+  });
+  app.component("check", {
+    template: "#check",
+    setup() {
+      // TODO:补全代码实现目标需求
+      let store1 = useStore()
+      let i = ref(0)
+      let inp = ref(['', '', '', '', '', ''])
+      let { yz, showName2, phoneNumber2 } = storeToRefs(store1)
+      let str = Array.from(phoneNumber2.value)
+      str.splice(3, 6, '*', '*', '*', '*', '*', '*')
+      str = str.join('')
+      function resit() {
+        yz.value = ''
+        for (let i = 0; i < 6; i++) {
+          yz.value += Math.floor(Math.random() * 10)
+        }
+        ElNotification({
+          title: '发送成功',
+          message: `您的验证码为${yz.value}`,
+          type: 'success',
+        })
+      }
+      onMounted(() => {
+        document.querySelectorAll('.code')[0].focus()
+        document.addEventListener('keydown', (e) => {
+          if (e.code == 'Backspace') {
+            i.value--
+            if (i.value < 0) {
+              i.value = 0
+            }
+            setTimeout(() => {
+              inp.value[i.value] = ''
+            }, 50)
+          } else {
+            i.value++
+          }
+        })
+      })
+      let stop = watch(inp, (val) => {
+        setTimeout(() => {
+          document.querySelectorAll('.code')[i.value].focus()
+        }, 50)
+        if (i.value == 6) {
+          setTimeout(() => {
+            let result = inp.value.join('')
+            if (result == yz.value) {
+              showName2.value = 'success'
+            } else {
+              inp.value = []
+              i.value = 0
+              document.querySelectorAll('.code')[i.value].focus()
+              ElNotification({
+                title: '验证失败',
+                message: '您输入的验证码有误',
+                type: 'error',
+              })
+            }
+          }, 50)
+        }
+      }, { deep: true })
+
+      return {
+        yz,
+        resit,
+        inp,
+        i,
+        str,
+        showName2,
+        phoneNumber2
+      };
+    },
+  });
+  app.component("success", {
+    template: "#success",
+  });
+  app.mount("#app");
+</script>
+
+</html>
+```
+
+# 2024三套模拟题详解第三套
+
+## 量子化css
+
+```js
+这题考察你css的基本功
+css的选择器的知识（属性选择器的使用）
+选择器
+div>item  div下的item儿子，不包括孙子
+div itemdiv下的全部item
+div.item div并且是item的元素
+div+p div紧紧相邻的p兄弟元素(向下)
+div~p div所有的p兄弟元素
+属性选择器
+当然也可以选择自定义属性的情况
+[option:selected]
+[title] 选中所有具有title属性的选择器
+[title='a'] 选中自定义属性title=a的元素
+[title^='a'] 选中以a开头的 
+[title$='a'] 选中以a结尾的
+[title*='a'] 选中包含a的 
+<div title='a'>
+伪类选择器
+a:link 选中没有访问的
+a:hover 悬浮
+a:visited 访问过之后的
+a:active 激活的时候
+a:focus 聚焦
+div:first/last-child div下的第一个元素
+div:nth-child() 第n个元素
+div>p:first/last-of-type选中第一个p元素类型的元素
+span:only-child() 选中span是唯一孩子的元素
+div:not(.fail/[title='xxx'])  选中div元素，排除身上有fail的
+a:checked  动态样式，选中的时候加上样式
+input:disable  选中禁用的input
+div:target 选中点击所指向的
+伪元素选择器
+div::first-letter选中第一个div下的字母
+div::first-line 选中第一行
+div::selection 被鼠标选择的单词
+input::placeholder 提示文字
+div::before/after {
+content：''  必写
+}再div之前添加一个元素
+
+
+答案，还需要了解以下css3的flex布局与grid布局
+div[flex="~ col"] {
+  display: flex;
+  flex-direction:column
+}
+```
+
+## 美食蛋白质秘密
+
+```js
+这题就考到了 fetch请求，题里面没有给你axios，你就只能使用原生的请求方式了
+      <div class="protein-container">
+            <!-- TODO:待补充代码，渲染获取的数据 -->
+            <div v-for="item in show" class="protein-item">{{item.name}} {{item.value}}</div>
+        </div>
+        
+  async function fetchData() {
+                    // TODO:待补充代码
+                    await fetch(MockURL, {
+                        method: "GET",
+                    })
+                        .then((s) => s.json())
+                        .then((e) => {
+                            show.value = e;
+                            let result = [{ name: "表头", icon: "none" }, ...e]
+                            echartsInit(result)
+                        });
+                }
+                onMounted(() => {
+                    fetchData()
+                })
+
+                return {
+                    show,
+                    echartsInit,
+                    fetchData
+                };
+            },
+```
+
+## 营业状态切换
+
+```js
+仔细看题目，
+const [isWorking, toggleWorking] = useToggle(false) 这行代码告诉你，要从这个函数身上解构出来两个东西
+仔细读代码可以看到，isWorking是用来控制显示和隐藏的而toggleWorking是一个方法，用来改变isworking的值的
+于是就有了下面的代码
+
+   function useToggle(state) {
+        // TODO:待补充代码
+        let isWorking = ref(state);
+        function toggleWorking() {
+          isWorking.value = !isWorking.value;
+        }
+        return [isWorking, toggleWorking];
+      }
+
+      const app = Vue.createApp({
+        setup() {
+          const [isWorking, toggleWorking] = useToggle(false); // 使用自定义的useToggle函数创建状态和切换函数
+          const workImage = "./images/open.jpg"; // 营业状态的图片路径
+          const restImage = "./images/close.jpg"; // 打烊状态的图片路径
+          return {
+            isWorking,
+            toggleWorking,
+            workImage,
+            restImage,
+          };
+        },
+      });
+```
+
+## 小说阅读器
+
+涉及nodejs，有缘人补之
+
+## 冰岛人
+
+写不出来....
+
+## 这是一个浏览器
+
+这道题蛮有意思的，考察你的dom操作的基本功，并且不允许自己获取dom元素，只能使用提供的dom元素
+
+同时不允许出现获取dom元素节点的语句，注释也不行
+
+```js
+"use strict";
+class Tab {
+  // 构造方法
+  constructor(id) {
+    // 获取元素
+    this.main = document.querySelector(id);
+    this.add = this.main.querySelector(".tabadd"); //添加按钮
+    this.ul = this.main.querySelector(".fisrstnav ul"); //ul
+    this.fsection = this.main.querySelector(".tabscon"); //内容
+    this.init();
+  }
+  // 初始化
+  init() {
+    this.updateNode();
+    // init初始化操作让相关元素绑定事件
+    this.add.onclick = this.addTab.bind(this.add, this);
+    for (var i = 0; i < this.lis.length; i++) {
+      this.lis[i].index = i; //注意这里，给每个li绑定了index值
+      this.lis[i].onclick = this.toggleTab.bind(this.lis[i], this);
+      this.remove[i].onclick = this.removeTab.bind(this.remove[i], this);
+      this.spans[i].ondblclick = this.editTab;
+      this.sections[i].ondblclick = this.editTab;
+    }
+  }
+  // 更新所有的li和section
+  updateNode() {
+    this.lis = this.main.querySelectorAll("li");
+    this.remove = this.main.querySelectorAll(".icon-guanbi");
+    this.sections = this.main.querySelectorAll("section");
+    this.spans = this.main.querySelectorAll(".content");
+  }
+  // 1.切换功能
+  toggleTab() {
+    tab.clearClass()
+    this.classList.add('liactive')
+    tab.sections[this.index].classList.add('conactive')
+  }
+  clearClass() {
+    for (var i = 0; i < this.lis.length; i++) {
+      this.lis[i].className = "";
+      this.sections[i].className = "";
+    }
+  }
+  // 3.添加标签页
+  addTab() {
+    // TODO：添加代码，当点击加号，添加新的标签页（对应的内容页也应一并添加）
+    let temp = `<li class="liactive">
+      <span class="content">标签页${tab.lis.length + 1}</span>
+      <span class="iconfont icon-guanbi">
+          <span class="glyphicon glyphicon-remove">
+          </span>
+      </span>
+  </li>`
+    let temp2 = `<section class="conactive">标签页${tab.lis.length + 1}的内容</section>`
+    tab.clearClass()
+    tab.ul.insertAdjacentHTML('beforeend', temp)
+    tab.fsection.insertAdjacentHTML('beforeend', temp2)
+    tab.init()
+    // TODO结束
+  }
+  removeTab(tab, e) {
+    this.parentNode.remove()
+    tab.fsection.children[this.parentNode.index].remove()
+    tab.init()
+    for (let i = 0; i < tab.lis.length; i++) {
+      tab.lis[i].children[0].innerHTML = `标签页${i + 1}`
+      tab.sections[i].innerHTML = `标签页${i + 1}的内容`
+    }
+      //注意看题，题目分为了删除的标签是不是当前选中页，如果是在考虑是不是最后一页的问题，不是则不变不管用他
+    if (this.parentNode.className.includes('liactive')) {
+      let min = Math.min(this.parentNode.index, tab.lis.length - 1); //很巧妙的方法，选择当前点击的索引和总长度取最小的-1那个加上激活样式， 如果是最后一夜，则点击的索引就是数组的长度，那么就给长度-1的标签激活，如果点击的不是最后一夜，那么那么点击的这个索引激活样式（因为假设有五页点击的是第三页索引，那么此时删除之后原来的第四页变成了现在的第三页，5-1=4，所以最小的是当前的第三页，如果删除的不是当前激活的样式，就不做任何操作）
+      [...tab.lis][min].click();
+    }
+    e.stopPropagation();
+  }
+  editTab() {
+    var str = this.innerHTML;
+    const that = this
+    window.getSelection
+      ? window.getSelection().removeAllRanges()
+      : document.Selection.empty();
+    this.innerHTML = '<input type="text" />';
+    var input = this.children[0];
+    input.value = str;
+    input.select(); //让文本框里的文字处于选定状态
+    input.onblur = function () {
+      let val = input.value
+      that.innerHTML = val
+    }
+    // TODO结束
+  }
+
+}
+var tab = new Tab("#tab");
+
+```
+
+
+
+## 趣味加密解密
+
+难
+
+第一问
+
+```js
+function create(codes) {
+    // 检查密码表
+    let setCodes = new Set(codes);
+    if (setCodes.size < 2) setCodes = new Set(defaultCodes);
+    const lCodes = Array.from(setCodes);
+    const iSize = lCodes.length;
+    // 确定单位长度
+    const iUnit = Math.ceil(Math.log(256) / Math.log(iSize));
+    // 生成位权表
+    const bits = [1];
+    for (let i = 1; i < iUnit; i++) bits.push(bits.at(-1) * iSize);
+    // 生成密码表
+    const lWords = [];
+    for (let i = 0; i <= 255; i++)
+        lWords.push(bits.map((b) => lCodes[Math.floor(i / b) % iSize]).join(""));
+    return [iUnit, lWords];
+}
+function encryption(plainText, codes) {
+    //TODO
+    const [_, lWords] = create(codes);
+    const lUints = Array.from(string2Unit8Array(plainText));
+    return lUints.map((v) => lWords[v]).join("");
+}
+```
+
+
+
+
+
+··
+
+1

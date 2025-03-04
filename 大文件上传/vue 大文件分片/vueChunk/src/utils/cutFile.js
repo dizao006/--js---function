@@ -12,6 +12,10 @@ export async function cutFile(file) {
         //利用多线程进行处理
         type: "module",
       });
+      //
+      //
+      //
+
       const start = i * threadChunkCount; //记录起始的分片位置
       const end = Math.min(count, (i + 1) * threadChunkCount); //任务的结束位置，注意，结束位置如果比整个分片数量要大，则分片数量为最后一个
       // 向其他线程发消息，将文件与每个分片的大小和起始与结束位置传入
@@ -22,6 +26,9 @@ export async function cutFile(file) {
         endChunkIndex: end,
       });
 
+      //
+      //
+      //
       worker.onmessage = (e) => {
         // 当其他线程给主线程发消息时候触发
         for (let i = start; i < end; i++) {

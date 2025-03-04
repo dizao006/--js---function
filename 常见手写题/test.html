@@ -7,10 +7,16 @@
   <title>Document</title>
 </head>
 
-<style>
-</style>
+
+
+
 
 <body>
+  <picture>
+    <source srcset="./1.avif" type="image/avif">
+    <source srcset="./1.webp" type="image/webp">
+    <img src="./1.png" alt="">
+  </picture>
   <input type="text" name="" id="">
   <input type="text">
   <span>123123</span>
@@ -28,9 +34,24 @@
   </ul>
 </body>
 <script>
+  const img = document.createElement("img");
+  img.src = "./1.avif";
+  img.onload = function (e) {
+    if (img.width > 0) {
+      console.log("avif")
+    } else {
+      img.src = "./1.png";
+    }
+  }
+  document.querySelector("body").appendChild(img);
 
-
+  // let a = 1
+  // const b = 2
+  // var c = 3
+  // console.log(window.a, window.b, window.c)
 
 </script>
+
+
 
 </html>

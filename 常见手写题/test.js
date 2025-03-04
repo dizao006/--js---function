@@ -35,19 +35,19 @@
 // // console.log(String(obj));
 
 // 测试为对象类型
-const obj = {
-  [Symbol.toPrimitive]: function () {
-    return "abc";
-  },
-  valueOf: function () {
-    return "bcd";
-  },
-  toString: function () {
-    return "cde";
-  },
-};
+// const obj = {
+//   [Symbol.toPrimitive]: function () {
+//     return "abc";
+//   },
+//   valueOf: function () {
+//     return "bcd";
+//   },
+//   toString: function () {
+//     return "cde";
+//   },
+// };
 
-console.log(obj + 1);
+// console.log(obj + 1);
 
 // /**
 //  * Definition for a binary tree node.
@@ -303,7 +303,42 @@ console.log(obj + 1);
 // };
 
 // maxScore([1, 2, 3, 4, 5, 6, 1], 3);
-function swap(a, b) {
-  return ([a, b] = [b, a]);
-}
-console.log(swap(1, 2));
+
+// add(1)(2)(3);
+
+// class Add {
+//   constructor(val) {
+//     this.num = val;
+//   }
+//   add(val) {
+//     this.num += val;
+//     return this;
+//   }
+//   valueOf() {
+//     return this.num;
+//   }
+// }
+
+// function add(initialValue) {
+//   return new Add(initialValue);
+// }
+
+// console.log(add(1).add(2).valueOf());
+
+// add(1)(2)(3);
+
+// function add(val) {
+//   let num = val;
+//   function add2(nextVal) {
+//     num += nextVal;
+//     return add2;
+//   }
+//   add2.valueOf = function () {
+//     return num;
+//   };
+//   return add2;
+// }
+
+// console.log(add(1)(2)(3).valueOf()); // 6
+
+

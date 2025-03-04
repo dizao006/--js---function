@@ -1,6 +1,7 @@
 //  cjs是  commenjs的书写方式
 // 它运行在一个宏任务中
 // process队列优先级是要高于微队列的，并且必须在一个任务清空完之后才去取另一个队列
+// 1x6873452
 console.log("1");
 setTimeout(() => {
   console.log("2");
