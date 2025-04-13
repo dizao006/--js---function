@@ -10,8 +10,10 @@ function kSmallest(arr, k) {
       index: index,
     };
   });
-  neArr.sort((a, b) => a.value - b.value);
-  return neArr.slice(0, k).map((e) => e.value);
+
+  let res = neArr.sort((a, b) => a.value - b.value).slice(0, k);
+  res.sort((a, b) => a.index - b.index);
+  return res.map((e) => e.value);
 }
 
-console.log(kSmallest([1, 2, 3, 4, 5, 3, 2], 3)); // [1, 2, 2]
+console.log(kSmallest([1, 2, 3, 4, 5, 3, 2], 5)); // [1, 2, 2]

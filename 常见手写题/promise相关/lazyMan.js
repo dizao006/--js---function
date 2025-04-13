@@ -71,13 +71,13 @@ LazyMan("Hank").sleepFirst(5).eat("supper");
 // LazyMan("Hank").eat("dinner").eat("supper");
 // LazyMan("c2c").sleep(2).eat("s");
 
-function deely(fn, time) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      fn();
-      resolve();
-    }, time);
-  });
-}
+// function deely(fn, time) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       fn();
+//       resolve();
+//     }, time);
+//   });
+// }
 
 // deely(() => console.log("end"), 1000);

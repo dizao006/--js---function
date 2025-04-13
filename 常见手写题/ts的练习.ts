@@ -1,85 +1,85 @@
-// // // #### 问题描述：
-// // // 给定一棵树 (Tree)，用 TypeScript 实现以下两种遍历算法：
-// // // 1. **广度优先搜索** (Breadth-First Search, BFS)
-// // // 2. **深度优先搜索** (Depth-First Search, DFS)
+// #### 问题描述：
+// 给定一棵树 (Tree)，用 TypeScript 实现以下两种遍历算法：
+// 1. **广度优先搜索** (Breadth-First Search, BFS)
+// 2. **深度优先搜索** (Depth-First Search, DFS)
 
-// // // #### 树的表示：
-// // // 树的每个节点可以用以下结构表示：
+// #### 树的表示：
+// 树的每个节点可以用以下结构表示：
 
-// // class TreeNode {
-// //   value: number;
-// //   children: TreeNode[];
+// class TreeNode {
+//   value: number;
+//   children: TreeNode[];
 
-// //   constructor(value: number, children: TreeNode[] = []) {
-// //     this.value = value;
-// //     this.children = children;
-// //   }
-// // }
+//   constructor(value: number, children: TreeNode[] = []) {
+//     this.value = value;
+//     this.children = children;
+//   }
+// }
 
-// // // 例如，以下是一个树的示例：
+// 例如，以下是一个树的示例：
 
-// // // ```
-// // //         1
-// // //       / | \
-// // //      2  3  4
-// // //     / \     \
-// // //    5   6     7
-// // // ```
+// ```
+//         1
+//       / | \
+//      2  3  4
+//     / \     \
+//    5   6     7
+// ```
 
-// // // 可以用以下代码构造这棵树：
+// 可以用以下代码构造这棵树：
 
-// // // ```typescript
-// // const tree = new TreeNode(1, [
-// //   new TreeNode(2, [new TreeNode(5), new TreeNode(6)]),
-// //   new TreeNode(3),
-// //   new TreeNode(4, [new TreeNode(7)]),
-// // ]);
-// // // ```
+// ```typescript
+// const tree = new TreeNode(1, [
+//   new TreeNode(2, [new TreeNode(5), new TreeNode(6)]),
+//   new TreeNode(3),
+//   new TreeNode(4, [new TreeNode(7)]),
+// ]);
+// ```
 
-// // // console.log(tree);
-// // // #### 要求：
-// // // 1. 实现一个函数 `bfs`，接受树的根节点作为输入，返回树的 BFS 遍历顺序。
-// // // 2. 实现一个函数 `dfs`，接受树的根节点作为输入，返回树的 DFS 遍历顺序。
+// console.log(tree);
+// #### 要求：
+// 1. 实现一个函数 `bfs`，接受树的根节点作为输入，返回树的 BFS 遍历顺序。
+// 2. 实现一个函数 `dfs`，接受树的根节点作为输入，返回树的 DFS 遍历顺序。
 
-// // // #### 示例输入输出：
-// // // 对于上述的 `tree`：
+// #### 示例输入输出：
+// 对于上述的 `tree`：
 
-// // // - **BFS**：
-// // //   ```typescript
-// // //   bfs(tree); // 输出: [1, 2, 3, 4, 5, 6, 7]
-// // //   ```
+// - **BFS**：
+//   ```typescript
+//   bfs(tree); // 输出: [1, 2, 3, 4, 5, 6, 7]
+//   ```
 
-// // function BFS(root: TreeNode) {
-// //   const queue: TreeNode[] = [root];
-// //   const result: TreeNode[] = [];
-// //   while (queue.length) {
-// //     const len = queue.length;
-// //     let current: any = [];
-// //     for (let i = 0; i < len; i++) {
-// //       const nod = queue.shift();
-// //       current.push(nod?.value);
-// //       nod?.children && queue.push(...nod.children);
-// //     }
-// //     result.push(...current);
-// //   }
-// //   console.log(JSON.stringify(result, null, 2));
-// //   return result;
-// // }
-// // // DFS(tree);
+// function BFS(root: TreeNode) {
+//   const queue: TreeNode[] = [root];
+//   const result: TreeNode[] = [];
+//   while (queue.length) {
+//     const len = queue.length;
+//     let current = [];
+//     for (let i = 0; i < len; i++) {
+//       const nod = queue.shift();
+//       current.push(nod?.value);
+//       nod?.children && queue.push(...nod.children);
+//     }
+//     result.push(...current);
+//   }
+//   console.log(JSON.stringify(result, null, 2));
+//   return result;
+// }
+// DFS(tree);
 
-// // // - **DFS**：
-// // //   ```typescript
-// // //   dfs(tree); // 输出: [1, 2, 5, 6, 3, 4, 7]  /先序
-// // //   ```
+// - **DFS**：
+//   ```typescript
+//   dfs(tree); // 输出: [1, 2, 5, 6, 3, 4, 7]  /先序
+//   ```
 
-// // function DFS(root: TreeNode) {
-// //   console.log(root.value);
-// //   for (let i = 0; i < root.children.length; i++) {
-// //     DFS(root.children[i]);
-// //   }
-// // }
-// // // DFS(tree);
-// // // ---
+// function DFS(root: TreeNode) {
+//   console.log(root.value);
+//   for (let i = 0; i < root.children.length; i++) {
+//     DFS(root.children[i]);
+//   }
+// }
+// DFS(tree);
+// ---
 
 // // // class student {
 // // //   name: string;
@@ -410,7 +410,7 @@
 
 // type Point = { x: number; y: number };
 // type P = keyof Point;
-// let a: P = "x";
+// let a2aa: P = "y";
 // // console.log();
 
 // // keyof 关键字用来获取一个类型的联合类型
@@ -438,11 +438,13 @@
 // // 定义正常的obj，可以动态追加属性
 // interface OBJ {
 //   name: string;
+//   age: number;
 //   [key: string]: any;
 // }
 // let obj: OBJ = {
 //   a: 1,
 //   b: 2,
+//   age: 1,
 //   name: "1",
 // };
 

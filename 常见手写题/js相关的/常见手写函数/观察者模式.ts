@@ -9,7 +9,7 @@ class Observe {
   addObserve(obser: obsers) {
     this.observes.push(obser);
   }
-  remloveObserve(obser: obsers) {
+  removeObserve(obser: obsers) {
     let index = this.observes.findIndex((e) => e == obser);
     if (index > -1) {
       this.observes.splice(index, 1);
@@ -43,7 +43,7 @@ observable.addObserve(observer2);
 observable.emit("New data is available!");
 
 // 移除一个观察者
-observable.remloveObserve(observer1);
+observable.removeObserve(observer1);
 
 // 再次发布数据
 observable.emit("Another new data!");

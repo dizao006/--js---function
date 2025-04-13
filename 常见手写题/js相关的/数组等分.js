@@ -14,6 +14,7 @@ function dengfenthere(arr) {
     result[index].sum += key;
     result[index].arr.push(key);
   }
+  console.log(result);
   return result;
 }
 

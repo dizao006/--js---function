@@ -7,8 +7,17 @@
     <title>Document</title>
 </head>
 
-<body>
+<style>
+    div {
+        width: var(--w);
+        height: var(--w);
+        color: red;
+        border: 1px solid black;
+    }
+</style>
 
+<body>
+    <div></div>
 </body>
 <script>
     // 实现一个函数，
@@ -18,7 +27,9 @@
         return Object.groupBy(arr, (e) => e[0])
     }
     let arr = ['zm', 'za', 'b', 'lm', 'ln', 'k']
-    console.log(GSH(arr)) 
+    console.log(GSH(arr))
+    let div = document.querySelector("div")
+    div.style.setProperty("--w", 100 + "px")
 </script>
 
 </html>

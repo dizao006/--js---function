@@ -46,8 +46,6 @@ const target2 = {
 function createProxy(target) {
   return new Proxy(target, {
     get(target, prop, reciver) {
-      console.log(reciver);
-      console.log(`Getting property "${prop}"`);
       const value = Reflect.get(target, prop, reciver);
       if (isObj(value)) {
         createProxy(value);
@@ -55,7 +53,6 @@ function createProxy(target) {
       return value;
     },
     set(target, prop, value, reciver) {
-      console.log(reciver);
       console.log(`Setting property "${prop}" to ${value}`);
       return Reflect.set(target, prop, value, reciver);
     },

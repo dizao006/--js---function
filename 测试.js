@@ -38,11 +38,9 @@
 //     }
 // }
 
-
-
 // let s = _isFibonacci([0, 1, 1, 2, 3, 5, 8])
 // console.log(s)
-let ar = [1, [2, 3, [4, 5]]]
+let ar = [1, [2, 3, [4, 5]]];
 // let s = ar.flat().flat()
 // let reult = Object.values(s)
 // console.log(Array.isArray(reult))
@@ -75,10 +73,10 @@ let ar = [1, [2, 3, [4, 5]]]
 // function s() {
 //      return (2)._isPrime() ===true
 // }
-// console.log(s()) 
+// console.log(s())
 // let reg=/[0-9]{17}[X|d]?/
 // let s='21062319980907888X'
-// console.log(reg.test(s)) 
+// console.log(reg.test(s))
 
 // const _symbolKey = array => {
 //      // 补全代码
@@ -174,7 +172,6 @@ let ar = [1, [2, 3, [4, 5]]]
 //      return proxy
 // }
 
-
 // function s() {
 //      let me = _proxy({
 //           name: 'me',
@@ -190,13 +187,13 @@ let ar = [1, [2, 3, [4, 5]]]
 //     name: 'se'
 // }
 // let s = ['1']
-// console.log(s.valueOf()) 
+// console.log(s.valueOf())
 // console.log(s.toString());
-// console.log(Number(s)) 
+// console.log(Number(s))
 // console.log(5 + s);
 // let x = 1
 // let y = x++ + ++x + x++ * ++x + ++x
-// console.log(y) 
+// console.log(y)
 
 // var a = {
 //     i: 1,
@@ -245,13 +242,33 @@ let ar = [1, [2, 3, [4, 5]]]
 // a()
 // console.log(a)
 
-function duichen(start, end) {
-    for (let i = start; i < end + 1; i++) {
-        let s = +(Array.from(i.toString()).reverse().join(''))
-        if (s === i & i > 10) {
-            console.log(i);
-        }
-    }
+// function duichen(start, end) {
+//     for (let i = start; i < end + 1; i++) {
+//         let s = +(Array.from(i.toString()).reverse().join(''))
+//         if (s === i & i > 10) {
+//             console.log(i);
+//         }
+//     }
 
+// }
+// duichen(10, 90)
+
+let arr = [1, 2, 3, 4, 5, 5.6, 6, 7, 9, 10];
+function TwoFind(arr, target) {
+  let left = 0;
+  let right = arr.length - 1;
+  while (left < right) {
+    let mid = left + ((right - left) >> 1);
+    if (target == arr[mid]) {
+      return true;
+    }
+    if (target < mid) {
+      right = mid;
+    } else {
+      left = mid + 1;
+    }
+  }
+  return false;
 }
-duichen(10, 90)
+
+console.log(TwoFind(arr, 5.6));

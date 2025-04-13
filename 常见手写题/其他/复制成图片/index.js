@@ -10,6 +10,9 @@ copy.addEventListener("click", () => {
       (blob) => {
         const clipBoardItem = new ClipboardItem({ "image/png": blob });
         navigator.clipboard.write([clipBoardItem]);
+        // navigator.clipboard.writeText("asdasd").then(() => {
+        //   console.log("ok");
+        // });
       },
       { type: "image/png" }
     );

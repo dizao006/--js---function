@@ -16,7 +16,7 @@ class Person {
     protected phone: string,
     private email: string
   ) {
-    Person.totl++; // 没创建一次，就加一
+    Person.totl++; // 每创建一次，就加一
   }
   // 实例方法挂在原型上
   // 静态方法与属性是挂载到类上

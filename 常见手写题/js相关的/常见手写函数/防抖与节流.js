@@ -1,10 +1,10 @@
 // 防抖函数
 function debounce(fn, dely) {
-  let timer;
-  return function (...args) {
+  let timer = null;
+  return function (...arg) {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      fn.apply(this, args);
+      fn.apply(this, arg);
     }, dely);
   };
 }

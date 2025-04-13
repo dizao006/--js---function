@@ -7,7 +7,7 @@ function observe(arr) {
       if (typeof v === "object") {
         observe(v);
       }
-      if (key < 0) {
+      while (key < 0) {
         let len = target.length;
         key = len - -key;
       }

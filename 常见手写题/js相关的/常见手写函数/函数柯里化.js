@@ -1,10 +1,9 @@
 function curry(fn) {
   return function _curry(...args) {
     if (args.length >= fn.length) return fn.apply(this, args);
-    else
-      return function (...arg2) {
-        return _curry.apply(this, args.concat(arg2));
-      };
+    return function (...arg2) {
+      return _curry.apply(this, args.concat(arg2));
+    };
   };
 }
 

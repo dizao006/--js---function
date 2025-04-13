@@ -1,28 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>语音识别 Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+  <body
+    class="bg-gray-100 font-sans flex flex-col items-center justify-center h-screen"
+  >
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <h1 class="text-2xl font-bold text-center mb-4">语音识别 Demo</h1>
+      <div class="item bg-gray-200 p-4 rounded-md mb-4 text-center">
+        识别结果将显示在这里
+      </div>
+      <div class="flex justify-center space-x-4">
+        <button
+          id="startButton"
+          class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring focus:ring-green-300"
+        >
+          <i class="fa-solid fa-microphone"></i> 开始识别
+        </button>
+        <button
+          id="stopButton"
+          class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300"
+          disabled
+        >
+          <i class="fa-solid fa-stop"></i> 停止识别
+        </button>
+      </div>
+    </div>
+  </body>
 
-<body>
-    <div class="item">123</div>
-    <button>test</button>
-</body>
+  <script>
+    const recognition = new (window.SpeechRecognition ||
+      window.webkitSpeechRecognition)();
+    recognition.continuous = true;
+    recognition.interimResults = true;
 
-<script>
-    let items = document.querySelectorAll('.item');
-    let btn = document.querySelector('button');
-    function handle() {
-        items.clientWidth
-        items.clientWidth
-        items.clientWidth
-        items.clientWidth
-        items.clientWidth
-    }
-    items.onClick = handle
-</script>
+    const startButton = document.getElementById("startButton");
+    const stopButton = document.getElementById("stopButton");
+    const itemDiv = document.querySelector(".item");
 
+    recognition.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join("");
+      itemDiv.textContent = transcript;
+      console.log("识别结果:", transcript);
+    };
+
+    recognition.onend = () => {
+      startButton.disabled = false;
+      stopButton.disabled = true;
+    };
+
+    startButton.addEventListener("click", () => {
+      recognition.start();
+      startButton.disabled = true;
+      stopButton.disabled = false;
+    });
+
+    stopButton.addEventListener("click", () => {
+      recognition.stop();
+      startButton.disabled = false;
+      stopButton.disabled = true;
+    });
+  </script>
 </html>

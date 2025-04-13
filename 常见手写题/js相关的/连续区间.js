@@ -20,4 +20,4 @@ let continuousNumbers = (nums) => {
   return result;
 };
 
-console.log(continuousNumbers([0, 1, 2, 4, 5, 7, 13, 15, 16]));
+console.log(continuousNumbers([0, 1, 2, 4, 5, 7, 13, 15, 16, 18]));
